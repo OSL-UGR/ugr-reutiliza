@@ -1,0 +1,85 @@
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	flex-direction: column;
+	text-align: center;
+	background-color: #f2f2f2;
+}
+
+.navigation {
+	margin: 3px;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-end;
+	border-radius: 8px;
+	background: rgba(128, 0, 128, 0.3);
+	list-style: none;
+}
+
+.navigation li {
+	text-decoration: none;
+	display: block;
+	padding: 1em;
+	color: black;
+	cursor: pointer;
+}
+
+.navigation li:hover {
+	background: #1565C0;
+	transition: 0.3s
+}
+
+.navigation > .last:hover{
+	border-radius: 0 8px 8px 0;
+}
+
+.muebles-table {
+	width: 97%;
+	margin: 1.5%;
+	display:flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	justify-self: self-end;
+	background: rgba(0, 128, 0, 0.3);
+	box-shadow: 2px 3px 0px 1px rgba(0, 0, 0, 0.4);
+	border-radius: 1em;
+	row-gap: 2%;
+}
+
+.mueble-container {
+	width: 15em;
+	background-color: #fff;
+	padding: 0% 2% 2% 2%;
+	margin:2em;
+	border-radius: 8px;
+	display:flex;
+
+	flex-direction: column;
+	justify-content: flex-start;
+	text-align: center;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	text-wrap: wrap;
+	flex-grow: 0;
+	cursor: pointer;
+}
+
+.mueble-container:hover {
+	filter: brightness(75%);
+	transition: 0.3s
+}
+
+.mueble-container:active{
+	filter: brightness(85%);
+	transition: 0s
+}
+
+.mueble-container > img{
+	height: 15em; 
+	width: 100%; 
+	object-fit: cover;
+	border-radius: 10px;
+	box-shadow: 2px 3px 0px 1px rgba(0, 0, 0, 0.4);
+}
+

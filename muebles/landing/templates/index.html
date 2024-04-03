@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Display Page</title>
+		{% load static %}
+		<link rel="stylesheet" type="text/css" href="{% static 'styles/styles.css' %}">
+	</head>
+	<body>
+		<ul class="navigation">
+			<li onclick='location.href="/";'>Home</a></li>
+			<li onclick='location.href="/";'>Perfil</a></li>
+			<li class="last" onclick='location.href="/";'>Log in</a></li>
+		</ul>
+		{% if listaMuebles %}
+		<div class="muebles-table">
+			{% for mueble in listaMuebles %}
+			<div onclick='location.href="/{{mueble.id}}/post";' class="mueble-container">
+				<h2>{{ mueble.nombre }}</h2>
+				<br>
+				<img src="{% static 'images/' %}{{ mueble.foto }}" alt="Imagen errónea">
+				<h3>Ubicación:</h3>
+				<p>{{mueble.ubiInicial}}</p>
+			</div>
+			{% endfor %}
+		</div>
+		{% elif not mueble %}
+		<p>No muebles are available</p>
+		{% endif %}
+
+		{% if mueble %}
+		<p>cargando el mueble {{mueble.nombre}}</p>
+		{% endif %}
+	</body>
+</html>
+
