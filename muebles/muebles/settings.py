@@ -32,13 +32,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'landing.apps.LandingConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
+    'landing'
 ]
 
 MIDDLEWARE = [
@@ -97,6 +98,8 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
+AUTH_USER_MODEL = 'landing.Usuario'
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -125,6 +128,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+GRAPH_MODELS = {
+
+        }
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

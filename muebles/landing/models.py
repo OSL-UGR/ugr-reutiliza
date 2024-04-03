@@ -1,15 +1,14 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-"""
-class Usuario(models.Model):
-    nombre = models.CharField(max_length=50)
-    apellidos = models.CharField(max_length=100)
-    puesto = models.CharField(max_length=100)
-    telefono = models.CharField(max_length=9)
+
+class Usuario(AbstractUser):
+    nombre = models.CharField(max_length=50, default="")
+    apellidos = models.CharField(max_length=100, default="")
     email = models.CharField(max_length=100, primary_key=True)
-    organizacion = models.CharField(max_length=200)
-    passwordHash = models.CharField(max_length=100)
-"""
+    puesto = models.CharField(max_length=100, default="")
+    telefono = models.CharField(max_length=9, default="")
+    organizacion = models.CharField(max_length=200, default="")
 
 
 class Mueble(models.Model):
