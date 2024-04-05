@@ -1,0 +1,32 @@
+{% extends 'index.html' %}
+
+{% block pages %}
+<li onclick='location.href="/";'>Catálogo</a></li>
+<li onclick='location.href="/perfil";'>Perfil</a></li>
+{% endblock %}
+
+{% block content %}
+
+{% if a %}
+<div class="alert success">
+	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+	Mueble añadido exitosamente
+</div>
+{% endif %}
+<form action="add" method="post" text-align="center" class="addMueble">
+	{% csrf_token %}
+	<label for="nombre"><b>Nombre:</b></label>
+	<input type="text" placeholder="Nombre" name="nombre" required>
+
+	<label for="foto"><b>Foto:</b></label>
+	<input type="text" placeholder="Foto" name="foto" required>
+
+	<label for="desc"><b>Breve descripción:</b></label>
+	<input type="text" placeholder="Descripción" name="desc" required>
+
+	<label for="ubiI"><b>Ubicación:</b></label>
+	<input type="text" placeholder="Ubicación Inicial" name="ubiI" required>
+
+	<button type="submit">Publicar</button>
+</form>
+{% endblock %}

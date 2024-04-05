@@ -1,0 +1,14 @@
+{% extends 'index.html' %}
+
+{% block pages %}
+<li onclick='location.href="/";'>Catálogo</a></li>
+<li onclick='location.href="/add";'>Añadir mueble</a></li>
+{% endblock %}
+
+{% block content %}
+<p>{{user.email}}</p>
+{% endblock %}
+
+{% block logged %}
+<li class="last" onclick='location.href="/logout";'>Log out</a></li>
+{% endblock %}

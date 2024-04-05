@@ -9,22 +9,30 @@ class Admin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = Usuario
-    list_display = ['email', 'username', 'telefono']
+    list_display = ("email", "is_staff", "is_active",)
+    list_filter = ("email", "is_staff", "is_active",)
     fieldsets = (
-            (None, {'fields': ('username', 'password')}), 
-            ('Personal info', {'fields': ('email', 'telefono')}), 
-            ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}), 
-            ('Important dates', {'fields': ('last_login', 'date_joined')})
+            (None, {
+                "fields": ("nombre", "apellidos", "puesto", "telefono",
+                           "organizacion", "email")}),
+            ("Permissions", {"fields": ("is_staff", "is_active", "groups",
+                                        "user_permissions")}),
             )
-    """(
-            ({
-                    'fields': ('email', 'password', 'username', 'telefono' )
-            }),
-    )
-    """
-    readonly_fields = ('email',)
+    add_fieldsets = (
+            (None, {
+                "classes": ("wide",),
+                "fields": ("nombre", "apellidos", "puesto", "telefono",
+                           "organizacion", "email", "password1",
+                           "password2")}),
+            ("Permissions", {"fields": ("is_staff",
+                                        "is_active", "groups",
+                                        "user_permissions")}
+
+             ),
+            )
+    search_fields = ("email",)
+    ordering = ("email",)
 
 
 admin.site.register(Usuario, Admin)
 admin.site.register(Mueble)
-# Register your models here.

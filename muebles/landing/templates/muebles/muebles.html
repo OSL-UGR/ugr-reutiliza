@@ -1,0 +1,49 @@
+{% extends 'index.html' %}
+
+
+{% block pages %}
+{% if mueble %}
+<li onclick='location.href="/";'>Catálogo</a></li>
+{% endif %}
+<li onclick='location.href="/add";'>Añadir mueble</a></li>
+<li onclick='location.href="/perfil";'>Perfil</a></li>
+{% endblock %}
+
+{% block content %}
+{% if listaMuebles %}
+<div class="muebles-table">
+	{% for mueble in listaMuebles %}
+	<div onclick='location.href="/{{mueble.id}}/post";' class="mueble-container">
+		<h2>{{ mueble.nombre }}</h2>
+		<br>
+		{% load static %}
+		<img src="{% static 'images/' %}{{ mueble.foto }}" alt="Imagen errónea">
+		<h3>Ubicación:</h3>
+		<p>{{ mueble.ubiInicial }}</p>
+	</div>
+	{% endfor %}
+</div>
+
+{% elif not mueble %}
+<p>No muebles are available</p>
+{% endif %}
+
+{% if mueble %}
+<div class="info-mueble">
+	<h1 class="nom">{{ mueble.nombre }}</h1>
+	<img src="{% static 'images/' %}{{ mueble.foto }}" class="foto">
+	<t1>Descipción:</t1>
+	<p class="desc">{{ mueble.descripcion }}</p>
+	<t2>Ubicación:</t2>
+	<p class="ubi"> {{ mueble.ubiInicial }}</p>
+	<t3>Ofertante:</t3>
+	<p class="ofer"> {{ ofertante.nombre }} {{ ofertante.apellidos }}</p>
+	<t4>Organizacion:</t4>
+	<p class="org"> {{ ofertante.organizacion }}</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block logged %}
+<li class="last" onclick='location.href="/logout";'>Log out</a></li>
+{% endblock %}

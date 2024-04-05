@@ -7,31 +7,23 @@
 		{% load static %}
 		<link rel="stylesheet" type="text/css" href="{% static 'styles/styles.css' %}">
 	</head>
+
 	<body>
 		<ul class="navigation">
+			{% block pages %}
 			<li onclick='location.href="/";'>Home</a></li>
-			<li onclick='location.href="/";'>Perfil</a></li>
-			<li class="last" onclick='location.href="/";'>Log in</a></li>
+			<li onclick='location.href="/add";'>Añadir mueble</a></li>
+			<li onclick='location.href="/perfil";'>Perfil</a></li>
+			{% endblock %}
+			{% block logged %}
+			<li class="last" onclick='location.href="/logout";'>Log out</a></li>
+			{% endblock %}
 		</ul>
-		{% if listaMuebles %}
-		<div class="muebles-table">
-			{% for mueble in listaMuebles %}
-			<div onclick='location.href="/{{mueble.id}}/post";' class="mueble-container">
-				<h2>{{ mueble.nombre }}</h2>
-				<br>
-				<img src="{% static 'images/' %}{{ mueble.foto }}" alt="Imagen errónea">
-				<h3>Ubicación:</h3>
-				<p>{{mueble.ubiInicial}}</p>
-			</div>
-			{% endfor %}
-		</div>
-		{% elif not mueble %}
-		<p>No muebles are available</p>
-		{% endif %}
 
-		{% if mueble %}
-		<p>cargando el mueble {{mueble.nombre}}</p>
-		{% endif %}
+		{% block content %}
+
+		{% endblock %}
+
 	</body>
-</html>
 
+</html>
