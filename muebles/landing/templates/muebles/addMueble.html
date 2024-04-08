@@ -13,13 +13,13 @@
 	Mueble añadido exitosamente
 </div>
 {% endif %}
-<form action="add" method="post" text-align="center" class="addMueble">
+<form action="add" method="post" text-align="center" class="addMueble" enctype='multipart/form-data'>
 	{% csrf_token %}
 	<label for="nombre"><b>Nombre:</b></label>
 	<input type="text" placeholder="Nombre" name="nombre" required>
 
-	<label for="foto"><b>Foto:</b></label>
-	<input type="text" placeholder="Foto" name="foto" required>
+	<label for="foto"><b>Fotos:</b></label>
+	<input type="file" placeholder="Foto" name="fotos" required multiple>
 
 	<label for="desc"><b>Breve descripción:</b></label>
 	<input type="text" placeholder="Descripción" name="desc" required>

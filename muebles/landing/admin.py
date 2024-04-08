@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import Mueble, Usuario
+from .models import Mueble, Usuario, Foto
 
 
 class Admin(UserAdmin):
@@ -30,9 +30,11 @@ class Admin(UserAdmin):
 
              ),
             )
-    search_fields = ("email",)
-    ordering = ("email",)
+    search_fields = ("email", "organizacion")
+    ordering = ("email", "organizacion")
+    readonly_fields = ("email",)
 
 
 admin.site.register(Usuario, Admin)
 admin.site.register(Mueble)
+admin.site.register(Foto)

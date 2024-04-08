@@ -19,6 +19,13 @@ body {
 	"t1 t2 t3 t4"
 	"cont1 cont2 cont3 cont4";
 }
+
+.info-mueble img{
+	margin: 1em;
+	height: 15em;
+	width: auto;
+	opacity: 0;
+}
 .nom {
 	grid-area: nom;
 }

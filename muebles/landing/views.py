@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Mueble, Usuario
+from .models import Mueble, Foto
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 from .backends import SettingsBackend
@@ -42,14 +42,18 @@ def addMueble(request):
     context = {}
     if (request.method == "POST"):
         nombre = request.POST['nombre']
-        foto = request.POST['foto']
+        fotos = request.FILES.getlist('fotos')
+        main_img = fotos[0]
         desc = request.POST['desc']
         ubiI = request.POST['ubiI']
-        mueble = Mueble(nombre=nombre, foto=foto,
+        mueble = Mueble(nombre=nombre, main_image=main_img,
                         descripcion=desc, ubiInicial=ubiI,
                         ofertante=request.user)
-        print(request.user.pk)
         mueble.save()
+        for img in fotos[1:]:
+            foto = Foto(mueble=mueble, imagen=img)
+            foto.save()
+        print(request.user.pk)
         context = {'a': "a"}
     return render(request, "muebles/addMueble.html", context)
 
@@ -73,8 +77,14 @@ def perfil(request):
 def post(request, mueble_id):
     mueble = Mueble.objects.get(pk=mueble_id)
     ofertante = mueble.ofertante
+    imagenes = [mueble.main_image]
+    fotos = Foto.objects.filter(mueble=mueble)
+    for foto in fotos:
+        imagenes.append(foto.imagen)
+    print(imagenes)
     context = {
             'mueble': mueble,
             'ofertante': ofertante,
+            'images': imagenes,
             }
     return render(request, "muebles/muebles.html", context)

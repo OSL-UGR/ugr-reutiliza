@@ -26,8 +26,6 @@ SECRET_KEY = 'django-insecure-!ps7i_pycpqk)@2flqesc7=6xby0r1#vi+*uv%d_jt+v4*nshy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -72,6 +70,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'muebles.wsgi.application'
 
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -134,8 +133,11 @@ GRAPH_MODELS = {
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = "/media/"
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'landing/static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

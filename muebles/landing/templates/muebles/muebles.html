@@ -17,7 +17,7 @@
 		<h2>{{ mueble.nombre }}</h2>
 		<br>
 		{% load static %}
-		<img src="{% static 'images/' %}{{ mueble.foto }}" alt="Imagen errónea">
+		<img src="{{ mueble.main_image.url }}" alt="Imagen errónea">
 		<h3>Ubicación:</h3>
 		<p>{{ mueble.ubiInicial }}</p>
 	</div>
@@ -31,7 +31,9 @@
 {% if mueble %}
 <div class="info-mueble">
 	<h1 class="nom">{{ mueble.nombre }}</h1>
-	<img src="{% static 'images/' %}{{ mueble.foto }}" class="foto">
+	{% for image in images %}
+	<img src="{{ image.url }}" class="foto">
+	{% endfor %}
 	<t1>Descipción:</t1>
 	<p class="desc">{{ mueble.descripcion }}</p>
 	<t2>Ubicación:</t2>
@@ -42,6 +44,25 @@
 	<p class="org"> {{ ofertante.organizacion }}</p>
 </div>
 {% endif %}
+
+<script>
+	const images = document.querySelectorAll('.info-mueble img');
+	let currentIndex = 0;
+
+	function changeImage() {
+		images[currentIndex].style.opacity = '0';
+		currentIndex = (currentIndex + 1) % images.length;
+		images[currentIndex].style.opacity = '1';
+	}
+
+	images[currentIndex].style.opacity = '1'; // show the first image initially
+
+	images.forEach((img, index) => {
+		img.addEventListener('click', () => {
+				changeImage();
+		});
+	});
+</script>
 {% endblock %}
 
 {% block logged %}

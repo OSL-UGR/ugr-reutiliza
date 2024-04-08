@@ -3,9 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.utils.deconstruct import deconstructible
-
+from django.conf import settings 
 from .managers import CustomUserManager
-
 
 
 @deconstructible
@@ -34,7 +33,6 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         user = cls.objects.get(email="alux6mc@gmail.com")
         return user.pk
 
-
     def __str__(self):
         return self.email
 
@@ -42,8 +40,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 class Mueble(models.Model):
     nombre = models.CharField(max_length=20, default="")
     dimensiones = models.CharField(max_length=200, default="")
-    foto = models.CharField(max_length=50, null=True)
     descripcion = models.CharField(max_length=4000)
+    main_image = models.ImageField(upload_to='images/')
     ofertante = models.ForeignKey(Usuario, related_name="user_email_provider",
                                   on_delete=models.CASCADE,
                                   default=Usuario.get_default_pk)
@@ -52,3 +50,8 @@ class Mueble(models.Model):
                                    on_delete=models.DO_NOTHING, null=True)
     ubiInicial = models.CharField(max_length=512, default="")
     ubiFinal = models.CharField(max_length=512, default="")
+
+
+class Foto(models.Model):
+    mueble = models.ForeignKey(Mueble, on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to='images/')
