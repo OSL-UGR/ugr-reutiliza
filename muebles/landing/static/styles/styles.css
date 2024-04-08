@@ -16,6 +16,7 @@ body {
 	grid-template-areas: 
 	". nom nom ."
 	". foto foto ."
+	". left right ."
 	"t1 t2 t3 t4"
 	"cont1 cont2 cont3 cont4";
 }
@@ -25,6 +26,7 @@ body {
 	height: 15em;
 	width: auto;
 	opacity: 0;
+	z-index: -1;
 }
 .nom {
 	grid-area: nom;
@@ -44,6 +46,39 @@ body {
 }
 .org {
 	grid-area: cont4;
+}
+.left {
+	align-self: center;
+	justify-self: end;
+	width: 0.5em;
+	height: 0.5em;
+	transform: rotate(135deg);
+	-webkit-transform: rotate(135deg);
+	grid-area: left;
+}
+.right {
+	justify-self: start;
+	align-self: center;
+	grid-area: right;
+	transform: rotate(-45deg);
+	-webkit-transform: rotate(-45deg);
+}
+
+.arrow {
+	width: 0.5em;
+	height: 0.5em;
+	margin: 2em;
+	border: solid black;
+	border-width: 0 5px 5px 0;
+	display: inline-block;
+	padding: 1em;
+}
+
+.arrow:hover {
+	margin: 1.8em;
+	border: solid #e74c3c;
+	border-width: 0 5px 5px 0;
+	padding: 1.2em;
 }
 
 t1 {
