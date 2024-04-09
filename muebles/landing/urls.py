@@ -13,11 +13,14 @@ urlpatterns = [
         path("perfil", views.perfil, name="perfil"),
         path("add", views.addMueble, name="add"),
         path("<int:mueble_id>/post", views.post, name="post"),
+        path("<int:mueble_id>/delete", views.deleteMueble, name="delete"),
+        path("<int:mueble_id>/modify", views.modifyMueble, name="modify"),
+        path("<int:mueble_id>/", views.deleteMueble, name="delete"),
         re_path(r'^media/(?P<path>.*)$', serve, {'document_root':
                                                  settings.MEDIA_ROOT}),
         re_path(r'^static/(?P<path>.*)$', serve, {'document_root':
                                                   settings.STATIC_ROOT}),
         ]
-
-urlpatterns += static(settings.MEDIA_URL,
-                      document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

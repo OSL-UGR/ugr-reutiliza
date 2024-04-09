@@ -17,6 +17,7 @@ body {
 	". nom nom ."
 	". foto foto ."
 	". left right ."
+	". modify delete ."
 	"t1 t2 t3 t4"
 	"cont1 cont2 cont3 cont4";
 }
@@ -47,11 +48,66 @@ body {
 .org {
 	grid-area: cont4;
 }
+.button {
+	border: none;
+	text-align: center;
+	font-size: 28px;
+	border-radius: 10px;
+	padding: 20px;
+	margin: 2em;
+}
+
+.button:hover {
+	filter: brightness(85%);
+}
+
+.modify {
+	height: 3em;
+	width: 90%;
+	grid-area: modify;
+	background-color: #F7C566;
+}
+
+.delete-form{
+	grid-area: delete;
+	width: 100%;
+}
+
+.delete {
+	height: 3em;
+	width: 90%;
+	background-color: #e72929;
+	color: white;
+}
+
+.circle {
+	margin: 1em;
+	border-radius: 60%;
+	background-color: #ccc;
+}
+
+.arrow {
+	width: 0.5em;
+	height: 0.5em;
+	margin: 2em;
+	border: solid black;
+	border-width: 0 5px 5px 0;
+	display: inline-block;
+	padding: 0.5em;
+	transform: translate(-8%, -8%);
+}
+
+.circle:hover > .arrow {
+	margin: 1.8em;
+	border: solid #e74c3c;
+	border-width: 0 6px 6px 0;
+	padding: 0.67em;
+	transform: translate(-10%, -10%);
+}
+
 .left {
 	align-self: center;
 	justify-self: end;
-	width: 0.5em;
-	height: 0.5em;
 	transform: rotate(135deg);
 	-webkit-transform: rotate(135deg);
 	grid-area: left;
@@ -62,23 +118,6 @@ body {
 	grid-area: right;
 	transform: rotate(-45deg);
 	-webkit-transform: rotate(-45deg);
-}
-
-.arrow {
-	width: 0.5em;
-	height: 0.5em;
-	margin: 2em;
-	border: solid black;
-	border-width: 0 5px 5px 0;
-	display: inline-block;
-	padding: 1em;
-}
-
-.arrow:hover {
-	margin: 1.8em;
-	border: solid #e74c3c;
-	border-width: 0 5px 5px 0;
-	padding: 1.2em;
 }
 
 t1 {
@@ -200,7 +239,9 @@ t4 {
 	flex-flow: row wrap;
 	justify-content: flex-end;
 	border-radius: 8px;
-	background: rgba(128, 0, 128, 0.3);
+	background: rgba(64, 0, 128, 0.3);
+
+	border: 3px solid rgba(64, 0, 128, 0.5);
 	list-style: none;
 }
 
@@ -253,7 +294,7 @@ t4 {
 
 .mueble-container:hover {
 	filter: brightness(75%);
-	transition: 0.3s
+	transition: 0.25s
 }
 
 .mueble-container:active{

@@ -1,11 +1,20 @@
 from django.shortcuts import render, redirect
-from .models import Mueble, Foto
-from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+
 from .backends import SettingsBackend
+from .models import Mueble, Foto, Usuario
 
 
 backend = SettingsBackend()
+
+
+def permisoBorrar(email, mueble_id):
+    mueble = Mueble.objects.get(pk=mueble_id)
+    usuario = Usuario.objects.get(pk=email)
+    return (usuario.is_staff or usuario.is_superuser or
+            usuario == mueble.ofertante)
 
 
 @login_required
@@ -14,7 +23,6 @@ def index(request):
     context = {
             "listaMuebles": listaMuebles,
             }
-    print(context)
     return render(request, "muebles/muebles.html", context)
 
 
@@ -38,24 +46,58 @@ def loginPage(request):
 
 
 @login_required
+def modifyMueble(request, mueble_id):
+    mueble = Mueble.objects.get(pk=mueble_id)
+    context = {
+            "mueble": mueble,
+            }
+    if (request.method == "POST"):
+        mueble.nombre = request.POST['nombre']
+        Foto.objects.filter(mueble=mueble).delete()
+        fotos = request.FILES.getlist('fotos')
+        mueble.main_image = fotos[0]
+        mueble.descripcion = request.POST['desc']
+        mueble.dimensiones = request.POST['dim']
+        mueble.ubiInicial = request.POST['ubiI']
+        mueble.save()
+
+        for img in fotos[1:]:
+            foto = Foto(mueble=mueble, imagen=img)
+            foto.save()
+        return redirect(f"/{mueble_id}/post")
+    return render(request, "muebles/modifyMueble.html", context)
+
+
+@login_required
 def addMueble(request):
     context = {}
     if (request.method == "POST"):
         nombre = request.POST['nombre']
         fotos = request.FILES.getlist('fotos')
         main_img = fotos[0]
+        dim = request.POST['dim']
         desc = request.POST['desc']
         ubiI = request.POST['ubiI']
         mueble = Mueble(nombre=nombre, main_image=main_img,
                         descripcion=desc, ubiInicial=ubiI,
-                        ofertante=request.user)
+                        ofertante=request.user, dimensiones=dim)
         mueble.save()
         for img in fotos[1:]:
             foto = Foto(mueble=mueble, imagen=img)
             foto.save()
-        print(request.user.pk)
-        context = {'a': "a"}
+        context = {"a": "a"}
     return render(request, "muebles/addMueble.html", context)
+
+
+@login_required
+def deleteMueble(request, mueble_id):
+    if (request.method == "POST"):
+        if (permisoBorrar(request.user, mueble_id)):
+            mueble = Mueble.objects.get(pk=mueble_id)
+            mueble.delete()
+        else:
+            return HttpResponse('Unauthorized', status=401)
+    return redirect("/")
 
 
 @login_required
@@ -79,12 +121,14 @@ def post(request, mueble_id):
     ofertante = mueble.ofertante
     imagenes = [mueble.main_image]
     fotos = Foto.objects.filter(mueble=mueble)
+    usuario = Usuario.objects.get(email=request.user)
+
     for foto in fotos:
         imagenes.append(foto.imagen)
-    print(imagenes)
     context = {
             'mueble': mueble,
             'ofertante': ofertante,
             'images': imagenes,
+            'user': usuario,
             }
     return render(request, "muebles/muebles.html", context)

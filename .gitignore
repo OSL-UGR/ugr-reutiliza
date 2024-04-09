@@ -162,3 +162,4 @@ cython_debug/
 *migrations/
 *images/
 Todo
+requirements.in

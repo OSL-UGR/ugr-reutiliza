@@ -34,8 +34,19 @@
 	{% for image in images %}
 	<img src="{{ image.url }}" class="foto">
 	{% endfor %}
-	<i class="arrow right"></i>
-	<i class="arrow left"></i>
+	<div class="circle right">
+		<i class="arrow"></i>
+	</div>
+	<div class="circle left">
+		<i class="arrow"></i>
+	</div>
+	{% if user.is_staff or user.is_superuser or user == ofertante %}
+	<form action="delete" class="delete-form" method="post">
+		{% csrf_token %}
+		<input class="button delete" type="button" value="Borrar" onclick='changeText()'>
+	</form>
+	<input class="button modify" type="button" value="Modificar" onclick='location.href="/{{ mueble.id }}/modify";'>
+	{% endif %}
 	<t1>Descipción:</t1>
 	<p class="desc">{{ mueble.descripcion }}</p>
 	<t2>Ubicación:</t2>
@@ -77,6 +88,24 @@
 		changeImage(1);
 	});
 
+</script>
+
+<script>
+	let contBorrado = 0;
+	const elem = document.querySelector('.delete');
+	const form = document.querySelector('.delete-form');
+	function changeText() {
+		contBorrado += 1;
+		if(contBorrado === 1) {
+			elem.value = "¿Seguro?";
+		}
+		else if(contBorrado === 2) {
+			elem.value = "¿Segurísimo?";
+		}
+		else if(contBorrado === 3) {
+			form.submit();
+		}
+	}
 </script>
 {% endblock %}
 
