@@ -49,6 +49,7 @@ def loginPage(request):
 def modifyMueble(request, mueble_id):
     mueble = Mueble.objects.get(pk=mueble_id)
     context = {
+            "action": 'modify',
             "mueble": mueble,
             }
     if (request.method == "POST"):
@@ -65,12 +66,14 @@ def modifyMueble(request, mueble_id):
             foto = Foto(mueble=mueble, imagen=img)
             foto.save()
         return redirect(f"/{mueble_id}/post")
-    return render(request, "muebles/modifyMueble.html", context)
+    return render(request, "muebles/addMueble.html", context)
 
 
 @login_required
 def addMueble(request):
-    context = {}
+    context = {
+            'action': 'add',
+            }
     if (request.method == "POST"):
         nombre = request.POST['nombre']
         fotos = request.FILES.getlist('fotos')
@@ -85,7 +88,7 @@ def addMueble(request):
         for img in fotos[1:]:
             foto = Foto(mueble=mueble, imagen=img)
             foto.save()
-        context = {"a": "a"}
+        context["a"] = "a"
     return render(request, "muebles/addMueble.html", context)
 
 

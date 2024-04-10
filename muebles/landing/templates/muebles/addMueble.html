@@ -13,22 +13,22 @@
 	Mueble añadido exitosamente
 </div>
 {% endif %}
-<form action="add" method="post" text-align="center" class="addMueble" enctype='multipart/form-data'>
+<form action="{{ action }}" method="post" text-align="center" class="addMueble" enctype='multipart/form-data'>
 	{% csrf_token %}
 	<label for="nombre"><b>Nombre:</b></label>
-	<input type="text" placeholder="Nombre" name="nombre" required>
+	<input type="text" value="{{ mueble.nombre }}" placeholder="Nombre" name="nombre" required>
 
 	<label for="foto"><b>Fotos:</b></label>
 	<input type="file" placeholder="Foto" name="fotos" required multiple>
 
 	<label for="dim"><b>Dimensiones:</b></label>
-	<input type="text" placeholder="Dimensiones" name="dim" required multiple>
+	<input type="text" value="{{ mueble.dimensiones }}" placeholder="Dimensiones" name="dim" required multiple>
 
 	<label for="desc"><b>Breve descripción:</b></label>
-	<input type="text" placeholder="Descripción" name="desc" required>
+	<input type="text" value="{{ mueble.descripcion }}" placeholder="Descripción" name="desc" required>
 
 	<label for="ubiI"><b>Ubicación:</b></label>
-	<input type="text" placeholder="Ubicación Inicial" name="ubiI" required>
+	<input type="text" value="{{ mueble.ubiInicial }}" placeholder="Ubicación Inicial" name="ubiI" required>
 
 	<button type="submit">Publicar</button>
 </form>

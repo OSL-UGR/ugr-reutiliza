@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.utils.deconstruct import deconstructible
-from django.conf import settings 
 from .managers import CustomUserManager
 
 
@@ -55,3 +54,4 @@ class Mueble(models.Model):
 class Foto(models.Model):
     mueble = models.ForeignKey(Mueble, on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to='images/')
+
