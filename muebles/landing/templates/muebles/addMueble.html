@@ -18,9 +18,6 @@
 	<label for="nombre"><b>Nombre:</b></label>
 	<input type="text" value="{{ mueble.nombre }}" placeholder="Nombre" name="nombre" required>
 
-	<label for="foto"><b>Fotos:</b></label>
-	<input type="file" placeholder="Foto" name="fotos" required multiple>
-
 	<label for="dim"><b>Dimensiones:</b></label>
 	<input type="text" value="{{ mueble.dimensiones }}" placeholder="Dimensiones" name="dim" required multiple>
 
@@ -30,6 +27,120 @@
 	<label for="ubiI"><b>Ubicación:</b></label>
 	<input type="text" value="{{ mueble.ubiInicial }}" placeholder="Ubicación Inicial" name="ubiI" required>
 
+	<label for="foto">Elige una imagen para subir (PNG, JPG)</label>
+	<input type="file" id="foto" placeholder="Foto" name="fotos" onchange="updateImageDisplay()" accept=
+	".apng, .bmp, .gif, .jpeg, .pjpeg, .png, .svg+xml, .tiff, .webp, .x-icon" required multiple>
+	<div class="preview">
+		<i class="aniadir fa fa-plus"></i>
+	</div>
+
 	<button type="submit">Publicar</button>
 </form>
+
+<script>
+	let filesData = []; 
+
+	const input = document.querySelector("#foto");
+	const preview = document.querySelector(".preview");
+	const aniadir = document.querySelector(".aniadir");
+	const form = document.querySelector(".addMueble");
+
+
+	form.addEventListener('submit', function(event) {
+		event.preventDefault();
+		sendData();
+	});
+
+	async function sendData() {
+		const picForm = new FormData(form);
+
+		Array.from(filesData).forEach(file => {
+			picForm.append('files', file);
+		});
+
+		const response = await fetch('{{action}}', {
+			method: 'POST',
+			body: picForm,
+		});
+
+		const redirectURL = response.url;
+		window.location.href = redirectURL;
+	}
+
+	aniadir.addEventListener('click', triggerForm);
+
+	function triggerForm() {
+		input.click();
+	}
+
+	function updateImageDisplay() {
+
+		let curFiles = [];
+
+		curFiles = input.files;
+		for(const file of curFiles) {
+			!filesData.some((innerFile) => innerFile.name === file.name) 
+				&& validFileType(file) && filesData.push(file);
+		}
+		drawImages();
+	}
+
+	function drawImages(){
+		while (preview.firstChild) {
+			preview.removeChild(preview.firstChild);
+		}
+		for (const file of filesData) {
+			let image = document.createElement("img");
+
+			image.src = URL.createObjectURL(file);
+			image.alt = image.title = file.name;
+			image.style.margin = '1em';
+			image.classList.add('image');
+
+			image.addEventListener('click', function() {
+				var index = filesData.findIndex((innerFile) => innerFile.name === image.title);
+
+				console.log(image.title);
+				console.log(filesData[index].name);
+				console.log(index);
+
+				filesData.splice(index,1);
+				image.remove();
+			});
+
+			preview.appendChild(image);
+		}
+		preview.appendChild(aniadir);
+
+	}
+
+	const fileTypes = [
+		"image/apng",
+		"image/bmp",
+		"image/gif",
+		"image/jpg",
+		"image/jpeg",
+		"image/pjpeg",
+		"image/png",
+		"image/svg+xml",
+		"image/tiff",
+		"image/webp",
+		"image/x-icon",
+	];
+
+	function validFileType(file) {
+		return fileTypes.includes(file.type);
+	}
+
+	function returnFileSize(number) {
+		if (number < 1024) {
+			return `${number} bytes`;
+		} else if (number >= 1024 && number < 1048576) {
+			return `${(number / 1024).toFixed(1)} KB`;
+		} else if (number >= 1048576) {
+			return `${(number / 1048576).toFixed(1)} MB`;
+		}
+	}
+
+</script>
 {% endblock %}

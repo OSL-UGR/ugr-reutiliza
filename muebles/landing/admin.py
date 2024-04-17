@@ -35,6 +35,9 @@ class Admin(UserAdmin):
     readonly_fields = ("email",)
 
 
+class MuebleAdmin(admin.ModelAdmin):
+    list_display = ["", "", "", ""]
+
 admin.site.register(Usuario, Admin)
 admin.site.register(Mueble)
 admin.site.register(Foto)

@@ -18,23 +18,18 @@ body {
 	". foto foto ."
 	". left right ."
 	". modify delete ."
+	". book book ."
 	"t1 t2 t3 t4"
 	"cont1 cont2 cont3 cont4";
 }
 
-.info-mueble img{
-	margin: 1em;
-	height: 15em;
-	width: auto;
-	opacity: 0;
-	z-index: -1;
-}
 .nom {
 	grid-area: nom;
 }
+
 .foto {
-	width:20em;
-	grid-area: foto;
+	height: 30em;
+	width: auto;
 }
 .desc {
 	grid-area: cont1;
@@ -53,8 +48,7 @@ body {
 	text-align: center;
 	font-size: 28px;
 	border-radius: 10px;
-	padding: 20px;
-	margin: 2em;
+	margin: 0.5em;
 }
 
 .button:hover {
@@ -77,6 +71,18 @@ body {
 	height: 3em;
 	width: 90%;
 	background-color: #e72929;
+	color: white;
+}
+
+.book-info {
+	width: 100%;
+	grid-area: book;
+	font-size: 1.3em;
+}
+.book {
+	height: 3em;
+	width: 90%;
+	background-color: #074173;
 	color: white;
 }
 
@@ -147,6 +153,53 @@ t4 {
 	opacity: 1;
 	transition: opacity 0.6s;
 	margin-bottom: 15px;
+}
+
+#foto {
+	display: none;
+	cursor: default;
+}
+
+.aniadir {
+	cursor: pointer;
+	font-size: 4em;
+}
+
+.image {
+	height: 10em;
+	max-width: 16em;
+	cursor: default;
+	object-fit: cover;
+	padding: 2px;
+}
+
+figure.zoom {
+	& img:hover {
+		opacity: 0;
+	}
+	img {
+		transition: opacity;
+		display: block;
+	}
+	grid-area: foto;
+	background-position: 50% 50%;
+	position: relative;
+	overflow: hidden;
+	cursor: zoom-in;
+}
+.image:hover {
+	border: 2.2px solid red;
+	padding: 0;
+}
+
+.preview {
+	min-height: 6em;
+	border: 4px dotted #999;
+	margin:2px;
+	display: flex;
+	flex-flow: row wrap;
+	align-items: center;
+	justify-content: center;
 }
 
 .alert.success {background-color: #04AA6D}

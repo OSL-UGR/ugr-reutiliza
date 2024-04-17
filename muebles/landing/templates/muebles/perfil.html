@@ -2,7 +2,9 @@
 
 {% block pages %}
 <li onclick='location.href="/";'>Catálogo</a></li>
+{% if user.is_staff or user.is_superuser %}
 <li onclick='location.href="/add";'>Añadir mueble</a></li>
+{% endif %}
 {% endblock %}
 
 {% block content %}

@@ -15,6 +15,7 @@ urlpatterns = [
         path("<int:mueble_id>/post", views.post, name="post"),
         path("<int:mueble_id>/delete", views.deleteMueble, name="delete"),
         path("<int:mueble_id>/modify", views.modifyMueble, name="modify"),
+        path("<int:mueble_id>/book", views.bookMueble, name="book"),
         path("<int:mueble_id>/", views.deleteMueble, name="delete"),
         re_path(r'^media/(?P<path>.*)$', serve, {'document_root':
                                                  settings.MEDIA_ROOT}),

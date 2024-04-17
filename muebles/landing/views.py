@@ -6,15 +6,32 @@ from django.contrib.auth.decorators import login_required
 from .backends import SettingsBackend
 from .models import Mueble, Foto, Usuario
 
+import smtplib
+
 
 backend = SettingsBackend()
 
 
-def permisoBorrar(email, mueble_id):
+def enviarEmail(demandante):
+    smtpObj = smtplib.SMTP()
+
+    sender = 'muebles@ejemplo.com'
+    receivers = ['gehibey464@dacgu.com']
+
+    smtpObj.sendmail(sender, receivers, message)
+
+
+def permisoAñadir(email):
+    usuario = Usuario.objects.get(pk=email)
+    return (usuario.is_staff or
+            usuario.is_superuser)
+
+
+def permisoModificar(email, mueble_id):
     mueble = Mueble.objects.get(pk=mueble_id)
     usuario = Usuario.objects.get(pk=email)
-    return (usuario.is_staff or usuario.is_superuser or
-            usuario == mueble.ofertante)
+    return ((usuario.is_staff and usuario == mueble.ofertante) or
+            usuario.is_superuser)
 
 
 @login_required
@@ -46,27 +63,41 @@ def loginPage(request):
 
 
 @login_required
+def bookMueble(request, mueble_id):
+    mueble = Mueble.objects.get(pk=mueble_id)
+    if (request.method == "POST" and mueble.demandante is None):
+        mueble.demandante = request.user
+        mueble.save()
+        return redirect(f"/{mueble_id}/post")
+    else:
+        return redirect("/")
+
+
+@login_required
 def modifyMueble(request, mueble_id):
     mueble = Mueble.objects.get(pk=mueble_id)
     context = {
             "action": 'modify',
             "mueble": mueble,
             }
-    if (request.method == "POST"):
-        mueble.nombre = request.POST['nombre']
-        Foto.objects.filter(mueble=mueble).delete()
-        fotos = request.FILES.getlist('fotos')
-        mueble.main_image = fotos[0]
-        mueble.descripcion = request.POST['desc']
-        mueble.dimensiones = request.POST['dim']
-        mueble.ubiInicial = request.POST['ubiI']
-        mueble.save()
+    if (permisoModificar(request.user, mueble_id)):
+        if (request.method == "POST"):
+            mueble.nombre = request.POST['nombre']
+            Foto.objects.filter(mueble=mueble).delete()
+            fotos = request.FILES.getlist('fotos')
+            mueble.main_image = fotos[0]
+            mueble.descripcion = request.POST['desc']
+            mueble.dimensiones = request.POST['dim']
+            mueble.ubiInicial = request.POST['ubiI']
+            mueble.save()
 
-        for img in fotos[1:]:
-            foto = Foto(mueble=mueble, imagen=img)
-            foto.save()
-        return redirect(f"/{mueble_id}/post")
-    return render(request, "muebles/addMueble.html", context)
+            for img in fotos[1:]:
+                foto = Foto(mueble=mueble, imagen=img)
+                foto.save()
+            return redirect(f"/{mueble_id}/post")
+        else:
+            return render(request, "muebles/addMueble.html", context)
+    return redirect("/")
 
 
 @login_required
@@ -74,28 +105,32 @@ def addMueble(request):
     context = {
             'action': 'add',
             }
-    if (request.method == "POST"):
-        nombre = request.POST['nombre']
-        fotos = request.FILES.getlist('fotos')
-        main_img = fotos[0]
-        dim = request.POST['dim']
-        desc = request.POST['desc']
-        ubiI = request.POST['ubiI']
-        mueble = Mueble(nombre=nombre, main_image=main_img,
-                        descripcion=desc, ubiInicial=ubiI,
-                        ofertante=request.user, dimensiones=dim)
-        mueble.save()
-        for img in fotos[1:]:
-            foto = Foto(mueble=mueble, imagen=img)
-            foto.save()
-        context["a"] = "a"
-    return render(request, "muebles/addMueble.html", context)
+    if (permisoAñadir(request.user)):
+        if (request.method == "POST"):
+            print(request.FILES)
+            nombre = request.POST['nombre']
+            fotos = request.FILES.getlist('files')
+            main_img = fotos[0]
+            dim = request.POST['dim']
+            desc = request.POST['desc']
+            ubiI = request.POST['ubiI']
+            mueble = Mueble(nombre=nombre, main_image=main_img,
+                            descripcion=desc, ubiInicial=ubiI,
+                            ofertante=request.user, dimensiones=dim)
+            mueble.save()
+            for img in fotos[1:]:
+                foto = Foto(mueble=mueble, imagen=img)
+                foto.save()
+            return redirect("/")
+        else:
+            return render(request, "muebles/addMueble.html", context)
+    return redirect("/")
 
 
 @login_required
 def deleteMueble(request, mueble_id):
     if (request.method == "POST"):
-        if (permisoBorrar(request.user, mueble_id)):
+        if (permisoModificar(request.user, mueble_id)):
             mueble = Mueble.objects.get(pk=mueble_id)
             mueble.delete()
         else:
@@ -122,6 +157,7 @@ def perfil(request):
 def post(request, mueble_id):
     mueble = Mueble.objects.get(pk=mueble_id)
     ofertante = mueble.ofertante
+    demandante = mueble.demandante
     imagenes = [mueble.main_image]
     fotos = Foto.objects.filter(mueble=mueble)
     usuario = Usuario.objects.get(email=request.user)
@@ -131,6 +167,7 @@ def post(request, mueble_id):
     context = {
             'mueble': mueble,
             'ofertante': ofertante,
+            'demandante': demandante,
             'images': imagenes,
             'user': usuario,
             }
