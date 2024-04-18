@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .backends import SettingsBackend
 from .models import Mueble, Foto, Usuario
 
+import json
 import smtplib
 
 
@@ -76,15 +77,21 @@ def bookMueble(request, mueble_id):
 @login_required
 def modifyMueble(request, mueble_id):
     mueble = Mueble.objects.get(pk=mueble_id)
+    fotoData = [mueble.main_image.url]
+    fotos = Foto.objects.filter(mueble=mueble)
+    for foto in fotos:
+        fotoData.append(foto.imagen.url)
     context = {
             "action": 'modify',
             "mueble": mueble,
+            "fotos": fotoData,
             }
+    print(fotoData)
     if (permisoModificar(request.user, mueble_id)):
         if (request.method == "POST"):
             mueble.nombre = request.POST['nombre']
             Foto.objects.filter(mueble=mueble).delete()
-            fotos = request.FILES.getlist('fotos')
+            fotos = request.FILES.getlist('files')
             mueble.main_image = fotos[0]
             mueble.descripcion = request.POST['desc']
             mueble.dimensiones = request.POST['dim']
@@ -104,6 +111,7 @@ def modifyMueble(request, mueble_id):
 def addMueble(request):
     context = {
             'action': 'add',
+            'fotos': '[]',
             }
     if (permisoAñadir(request.user)):
         if (request.method == "POST"):

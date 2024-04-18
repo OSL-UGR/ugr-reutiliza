@@ -27,10 +27,6 @@ body {
 	grid-area: nom;
 }
 
-.foto {
-	height: 30em;
-	width: auto;
-}
 .desc {
 	grid-area: cont1;
 }
@@ -50,7 +46,19 @@ body {
 	border-radius: 10px;
 	margin: 0.5em;
 }
+.span-wrapper {
+	grid-area: foto;
+	opacity: 0;
+	z-index: -1;
+}
+.span-wrapper:hover {
+	cursor: zoom-in;
+}
 
+.foto {
+	height: 30em;
+	width: auto;
+}
 .button:hover {
 	filter: brightness(85%);
 }
@@ -173,23 +181,12 @@ t4 {
 	padding: 2px;
 }
 
-figure.zoom {
-	& img:hover {
-		opacity: 0;
-	}
-	img {
-		transition: opacity;
-		display: block;
-	}
-	grid-area: foto;
-	background-position: 50% 50%;
-	position: relative;
-	overflow: hidden;
-	cursor: zoom-in;
-}
 .image:hover {
 	border: 2.2px solid red;
 	padding: 0;
+}
+
+.foto-container {
 }
 
 .preview {

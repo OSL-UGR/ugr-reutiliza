@@ -29,7 +29,7 @@
 
 	<label for="foto">Elige una imagen para subir (PNG, JPG)</label>
 	<input type="file" id="foto" placeholder="Foto" name="fotos" onchange="updateImageDisplay()" accept=
-	".apng, .bmp, .gif, .jpeg, .pjpeg, .png, .svg+xml, .tiff, .webp, .x-icon" required multiple>
+	".apng, .bmp, .gif, .jpeg, .pjpeg, .png, .svg+xml, .tiff, .webp, .x-icon" multiple>
 	<div class="preview">
 		<i class="aniadir fa fa-plus"></i>
 	</div>
@@ -38,12 +38,43 @@
 </form>
 
 <script>
-	let filesData = []; 
-
 	const input = document.querySelector("#foto");
 	const preview = document.querySelector(".preview");
 	const aniadir = document.querySelector(".aniadir");
 	const form = document.querySelector(".addMueble");
+
+	async function createFileFromURL(url, filename) {
+		try {
+			// Fetch the file
+			const response = await fetch(url);
+			const blob = await response.blob();
+
+			// Create a new File object
+			const file = new File([blob], filename, { type: blob.type });
+
+			return file;
+		} catch (error) {
+			console.error('Error creating file from URL:', error);
+			throw error;
+		}
+	}
+
+	let filesData = [];
+	async function fillFiles() {
+		for (let foto of {{fotos|safe}}){
+			let name = foto.substring(foto.lastIndexOf('/') + 1);
+
+			try {
+				const file = await createFileFromURL(foto, name);
+				filesData.push(file);
+			} catch (error) {
+				console.error('Error processing URL:', foro, error);
+			}
+		}
+		updateImageDisplay();
+	};
+	fillFiles();
+
 
 
 	form.addEventListener('submit', function(event) {
@@ -52,19 +83,24 @@
 	});
 
 	async function sendData() {
-		const picForm = new FormData(form);
+		if(filesData.length === 0){
+			console.error('Formulario vacío detectado');
+		}
+		else{
+			const picForm = new FormData(form);
 
-		Array.from(filesData).forEach(file => {
-			picForm.append('files', file);
-		});
+			Array.from(filesData).forEach(file => {
+				picForm.append('files', file);
+			});
 
-		const response = await fetch('{{action}}', {
-			method: 'POST',
-			body: picForm,
-		});
+			const response = await fetch('{{action}}', {
+				method: 'POST',
+				body: picForm,
+			});
 
-		const redirectURL = response.url;
-		window.location.href = redirectURL;
+			const redirectURL = response.url;
+			window.location.href = redirectURL;
+		}
 	}
 
 	aniadir.addEventListener('click', triggerForm);
@@ -92,7 +128,11 @@
 		for (const file of filesData) {
 			let image = document.createElement("img");
 
-			image.src = URL.createObjectURL(file);
+			try{
+				image.src = URL.createObjectURL(file);
+			} catch{
+				image.src = file;
+			}
 			image.alt = image.title = file.name;
 			image.style.margin = '1em';
 			image.classList.add('image');
