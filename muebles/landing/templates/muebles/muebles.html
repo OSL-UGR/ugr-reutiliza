@@ -48,6 +48,10 @@
 	<form action="delete" class="delete-form" method="post">
 		{% csrf_token %}
 		<input class="button delete" type="button" value="Borrar" onclick='changeText()'>
+		<div id="confirm" style="opacity:0;z-index:-1">
+			<input class="button confirmar" type="button" value="Confirmar" onclick='si()'>
+			<input class="button cancelar" type="button" value="Cancelar" onclick='no()'>
+		</div>
 	</form>
 	<input class="button modify" type="button" value="Modificar" onclick='location.href="/{{ mueble.id }}/modify";'>
 	{% endif %}
@@ -83,21 +87,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js"></script>
 <script src="{% static 'js/muebles.js'%}"></script>
 <script>
-	let contBorrado = 0;
 	const elem = document.querySelector('.delete');
+	const div = document.querySelector('#confirm');
 	const form = document.querySelector('.delete-form');
 
 	function changeText() {
-		contBorrado += 1;
-		if(contBorrado === 1) {
-			elem.value = "¿Seguro?";
-		}
-		else if(contBorrado === 2) {
-			elem.value = "¿Segurísimo?";
-		}
-		else if(contBorrado === 3) {
-			form.submit();
-		}
+			elem.style.opacity='0';
+			elem.style.zIndex='-1';
+			div.style.opacity='1';
+			div.style.zIndex='1';
+	}
+	function si(){
+		form.submit();
+	}
+	function no(){
+			div.style.opacity='0';
+			div.style.zIndex='-1';
+			elem.style.opacity='1';
+			elem.style.zIndex='1';
 	}
 </script>
 {% endblock %}

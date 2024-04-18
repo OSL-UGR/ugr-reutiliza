@@ -73,9 +73,31 @@ body {
 
 .delete-form{
 	grid-area: delete;
+	position: relative;
 	width: 100%;
 }
 
+#confirm {
+	position: absolute;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+.cancelar {
+	height: 3em;
+	width: 90%;
+	background-color: #56bf52;
+	color: white;
+}
+.confirmar {
+	height: 3em;
+	width: 90%;
+	background-color: #e72929;
+	color: white;
+}
 .delete {
 	height: 3em;
 	width: 90%;
