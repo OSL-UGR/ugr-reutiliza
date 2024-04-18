@@ -58,6 +58,7 @@ body {
 .foto {
 	height: 30em;
 	width: auto;
+	max-width: 100em;
 }
 .button:hover {
 	filter: brightness(85%);

@@ -16,8 +16,15 @@ $('.zoom').each(function() {
 			'padding-left': $(this).width(),
 		}); 
 	}
+	setTimeout(setup(), 100);
 });
-span = document.querySelectorAll('.span-wrapper');
+
+function setup() {
+	span = document.querySelectorAll('.span-wrapper');
+
+	span[currentIndex].style.opacity = '1'; // show the first image initially
+	span[currentIndex].style.zIndex = '1';
+}
 
 function changeImage(value) {
 	span[currentIndex].style.opacity = '0';
@@ -31,9 +38,6 @@ function changeImage(value) {
 	span[currentIndex].style.opacity = '1';
 	span[currentIndex].style.zIndex = '1';
 }
-
-span[currentIndex].style.opacity = '1'; // show the first image initially
-span[currentIndex].style.zIndex = '1';
 
 const leftArrow = document.querySelector('.left');
 const rightArrow = document.querySelector('.right');
