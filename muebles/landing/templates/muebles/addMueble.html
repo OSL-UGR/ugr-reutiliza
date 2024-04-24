@@ -127,6 +127,8 @@
 		}
 		for (const file of filesData) {
 			let image = document.createElement("img");
+			let cross = document.createElement("div");
+			let div = document.createElement("div");
 
 			try{
 				image.src = URL.createObjectURL(file);
@@ -136,19 +138,22 @@
 			image.alt = image.title = file.name;
 			image.style.margin = '1em';
 			image.classList.add('image');
+			div.appendChild(image);
 
-			image.addEventListener('click', function() {
+			cross.classList.add('cross-overlay');			
+			cross.textContent = 'X';
+
+			cross.addEventListener('click', function() {
 				var index = filesData.findIndex((innerFile) => innerFile.name === image.title);
 
-				console.log(image.title);
-				console.log(filesData[index].name);
-				console.log(index);
-
 				filesData.splice(index,1);
-				image.remove();
+				image.parentNode.remove();
+				input.value = '';
 			});
-
-			preview.appendChild(image);
+			
+			div.appendChild(cross);
+			div.classList.add('div-img');
+			preview.appendChild(div);
 		}
 		preview.appendChild(aniadir);
 

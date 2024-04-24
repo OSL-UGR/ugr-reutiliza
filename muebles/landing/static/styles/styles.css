@@ -209,7 +209,21 @@ t4 {
 	padding: 0;
 }
 
-.foto-container {
+.div-img {
+	position: relative;	
+}
+.cross-overlay {
+    position: absolute;
+	width:16px;
+	height:16px;
+    top: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    color: white;
+    background-color: red;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 50%; /* Makes it round */
+    z-index: 2; /* Ensure it's above the image */
 }
 
 .preview {

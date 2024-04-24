@@ -4,20 +4,28 @@ let span = "";
 
 let currentIndex = 0;
 
-$('.zoom').each(function() {
-	$(this).wrap('<span style="display:inline-block;justify-self:center" class="span-wrapper"></span>')
-		.css('display', 'block')
-		.parent()
-		.zoom({url: $(this).attr('src')
-		});
-	if($(this).width() < 500){
-		$(this).parent().css({
-			'width': $(this).width() * 2,
-			'padding-left': $(this).width(),
+function createSpan(){
+	$('.zoom').each(function() {
+		var $zoomedImg = $(this);
+		$zoomedImg.wrap('<span style="display:inline-block;justify-self:center" class="span-wrapper"></span>')
+			.css('display', 'block')
+			.parent()
+			.zoom({url: $zoomedImg.attr('src'),
+				callback: function() {
+					setupSpan($zoomedImg);
+				}
+			});
+	});
+	setup();
+}
+function setupSpan($image){
+	if($image.width() < 500){
+		$image.parent().css({
+			'width': $image.width() * 2,
+			'padding-left': $image.width(),
 		}); 
 	}
-	setTimeout(setup(), 100);
-});
+}
 
 function setup() {
 	span = document.querySelectorAll('.span-wrapper');
@@ -25,6 +33,8 @@ function setup() {
 	span[currentIndex].style.opacity = '1'; // show the first image initially
 	span[currentIndex].style.zIndex = '1';
 }
+
+createSpan();
 
 function changeImage(value) {
 	span[currentIndex].style.opacity = '0';
