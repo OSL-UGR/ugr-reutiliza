@@ -31,7 +31,7 @@
 	<input type="file" id="foto" placeholder="Foto" name="fotos" onchange="updateImageDisplay()" accept=
 	".apng, .bmp, .gif, .jpeg, .pjpeg, .png, .svg+xml, .tiff, .webp, .x-icon" multiple>
 	<div class="preview">
-		<i class="aniadir fa fa-plus"></i>
+		<i class="aniadir fa fa-plus popup"><span class="popuptext" id="myPopup">Debes añadir al menos una imagen</span></i>
 	</div>
 
 	<button type="submit">Publicar</button>
@@ -42,6 +42,24 @@
 	const preview = document.querySelector(".preview");
 	const aniadir = document.querySelector(".aniadir");
 	const form = document.querySelector(".addMueble");
+	const popup = document.getElementById("myPopup");
+
+	let isAnimating = false;
+
+	function imgPopup() {
+		if (isAnimating) return;
+
+		isAnimating = true;
+
+		popup.classList.remove("hide");
+		popup.classList.toggle("show");
+
+		setTimeout(function() {
+			popup.classList.remove("show");
+			popup.classList.toggle("hide");
+			isAnimating = false;
+		}, 1000);
+	}
 
 	async function createFileFromURL(url, filename) {
 		try {
@@ -84,6 +102,7 @@
 
 	async function sendData() {
 		if(filesData.length === 0){
+			imgPopup();
 			console.error('Formulario vacío detectado');
 		}
 		else{
@@ -150,7 +169,7 @@
 				image.parentNode.remove();
 				input.value = '';
 			});
-			
+
 			div.appendChild(cross);
 			div.classList.add('div-img');
 			preview.appendChild(div);

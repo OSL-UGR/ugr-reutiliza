@@ -8,6 +8,40 @@ body {
 	background-color: #f2f2f2;
 }
 
+/***********************************************************/
+/********************HEADER*********************************/
+/***********************************************************/
+.navigation {
+	margin: 3px;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-end;
+	border-radius: 8px;
+	background: rgba(64, 0, 128, 0.3);
+
+	border: 3px solid rgba(64, 0, 128, 0.5);
+	list-style: none;
+}
+
+.navigation li {
+	text-decoration: none;
+	display: block;
+	padding: 1em;
+	color: black;
+	cursor: pointer;
+}
+
+.navigation li:hover {
+	background: #1565C0;
+	transition: 0.3s
+}
+
+.navigation > .last:hover{
+	border-radius: 0 8px 8px 0;
+}
+/***********************************************************/
+/********************MUEBLES********************************/
+/***********************************************************/
 .info-mueble {
 	display: grid;
 	grid-template-columns: 25% 25% 25% 25%;
@@ -45,14 +79,6 @@ body {
 	font-size: 28px;
 	border-radius: 10px;
 	margin: 0.5em;
-}
-.span-wrapper {
-	grid-area: foto;
-	opacity: 0;
-	z-index: -1;
-}
-.span-wrapper:hover {
-	cursor: zoom-in;
 }
 
 .foto {
@@ -177,6 +203,14 @@ t4 {
 	font-weight: bold; /* Example font weight */
 	grid-area: t4;
 }
+.span-wrapper {
+	grid-area: foto;
+	opacity: 0;
+	z-index: -1;
+}
+.span-wrapper:hover {
+	cursor: zoom-in;
+}
 .alert {
 	padding: 20px;
 	background-color: #f44336;
@@ -185,7 +219,81 @@ t4 {
 	transition: opacity 0.6s;
 	margin-bottom: 15px;
 }
+/***********************************************************/
+/*******************POPUPS**********************************/ 
+/***********************************************************/ 
+.popup {
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
 
+/* The actual popup */
+.popup .popuptext {
+	font-size:0.25em;
+	visibility: hidden;
+	width: 250px;
+	margin-left: -125px;
+	background-color: #555;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 8px 0;
+	position: absolute;
+	z-index: 1;
+	bottom: 75%;
+	left: 50%;
+}
+/* Popup arrow */
+.popup .popuptext::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+	visibility: visible;
+	-webkit-animation: fadeIn 0.3s;
+	animation: fadeIn 0.3s;
+}
+.popup .hide {
+	-webkit-animation: fadeOut 0.3s;
+	animation: fadeOut 0.3s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+	from {opacity: 0;visibility:hidden} 
+	to {opacity: 1;visibility:visible}
+}
+
+@keyframes fadeIn {
+	from {opacity: 0;visibility:hidden}
+	to {opacity:1 ;visibility:visible}
+}
+/* Add animation (fade out the popup) */
+@-webkit-keyframes fadeOut {
+  from {opacity: 1;visibility:visible} 
+  to {opacity: 0;visibility:hidden}
+}
+
+@keyframes fadeOut {
+  from {opacity: 1;visibility:visible}
+  to {opacity: 0;visibility:hidden}
+}
+/***********************************************************/
+/*******************EDITAR MUEBLES**************************/
+/***********************************************************/
 #foto {
 	display: none;
 	cursor: default;
@@ -214,17 +322,21 @@ t4 {
 .cross-overlay {
 	text-align: center;
 	opacity: 0;
-    position: absolute;
+	position: absolute;
 	width:16px;
 	height:16px;
-    top: 20px; /* Adjust as needed */
-    right: 20px; /* Adjust as needed */
-    color: white;
-    background-color: red;
-    padding: 5px;
-    cursor: pointer;
-    border-radius: 50%; /* Makes it round */
-    z-index: 2; /* Ensure it's above the image */
+	top: 20px; /* Adjust as needed */
+	right: 20px; /* Adjust as needed */
+	color: white;
+	background-color: black;
+	padding: 5px;
+	cursor: pointer;
+	border-radius: 50%; /* Makes it round */
+	z-index: 2; /* Ensure it's above the image */
+}
+.cross-overlay:hover {
+	opacity: 1;
+	background-color: red;
 }
 
 .preview {
@@ -288,6 +400,9 @@ t4 {
 	margin: 5px;
 }
 
+/***********************************************************/
+/********************LOG IN*********************************/
+/***********************************************************/
 .login {
 	width: 20em;
 	justify-self:center;
@@ -321,35 +436,10 @@ t4 {
 	border: none;
 	border-bottom: 2px solid #f4511e;
 }
-.navigation {
-	margin: 3px;
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: flex-end;
-	border-radius: 8px;
-	background: rgba(64, 0, 128, 0.3);
 
-	border: 3px solid rgba(64, 0, 128, 0.5);
-	list-style: none;
-}
-
-.navigation li {
-	text-decoration: none;
-	display: block;
-	padding: 1em;
-	color: black;
-	cursor: pointer;
-}
-
-.navigation li:hover {
-	background: #1565C0;
-	transition: 0.3s
-}
-
-.navigation > .last:hover{
-	border-radius: 0 8px 8px 0;
-}
-
+/***********************************************************/
+/********************PÁGINA EXPOSITOR***********************/
+/***********************************************************/
 .muebles-table {
 	width: 97%;
 	margin: 1.5%;
