@@ -53,10 +53,16 @@ class Mueble(models.Model):
     ubiInicial = models.CharField(max_length=512, default="")
     ubiFinal = models.CharField(max_length=512, default="")
 
+    def get_absolute_url(self):
+        return f'/{self.id}/post'
+
 
 class Foto(models.Model):
     mueble = models.ForeignKey(Mueble, on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to='images/')
+
+    def get_absolute_url(self):
+        return f'{self.imagen.url}'
 
 
 @receiver([pre_delete, pre_save], sender=Foto)
@@ -72,7 +78,6 @@ def delete_images_foto(sender, instance, **kwargs):
                 # Delete the file
                 os.remove(image_path)
     elif kwargs.get('signal') == pre_save:
-        # If the instance is being modified, check if the image field has changed
         if instance.pk:
             original_instance = sender.objects.get(pk=instance.pk)
             if original_instance.imagen != instance.imagen:
@@ -81,6 +86,7 @@ def delete_images_foto(sender, instance, **kwargs):
                     old_image_path = original_instance.imagen.path
                     if os.path.exists(old_image_path):
                         os.remove(old_image_path)
+
 
 
 @receiver([pre_delete, pre_save], sender=Mueble)

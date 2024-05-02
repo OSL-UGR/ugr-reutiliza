@@ -13,23 +13,28 @@
 	Mueble añadido exitosamente
 </div>
 {% endif %}
+{% if mueble %}
+<h1>Modificar mueble</h1>
+{% else %}
+<h1>Añadir mueble</h1>
+{% endif %}
 <form action="{{ action }}" method="post" text-align="center" class="addMueble" enctype='multipart/form-data'>
 	{% csrf_token %}
 	<label for="nombre"><b>Nombre:</b></label>
-	<input type="text" value="{{ mueble.nombre }}" placeholder="Nombre" name="nombre" required>
+	<input type="text" id="nombre" value="{{ mueble.nombre }}" placeholder="Nombre" name="nombre" required>
 
 	<label for="dim"><b>Dimensiones:</b></label>
-	<input type="text" value="{{ mueble.dimensiones }}" placeholder="Dimensiones" name="dim" required multiple>
+	<input type="text" id="dim" value="{{ mueble.dimensiones }}" placeholder="Dimensiones" name="dim" required multiple>
 
 	<label for="desc"><b>Breve descripción:</b></label>
-	<input type="text" value="{{ mueble.descripcion }}" placeholder="Descripción" name="desc" required>
+	<input type="text" id="desc" value="{{ mueble.descripcion }}" placeholder="Descripción" name="desc" required>
 
 	<label for="ubiI"><b>Ubicación:</b></label>
-	<input type="text" value="{{ mueble.ubiInicial }}" placeholder="Ubicación Inicial" name="ubiI" required>
+	<input type="text" id="ubiI" value="{{ mueble.ubiInicial }}" placeholder="Ubicación Inicial" name="ubiI" required>
 
 	<label for="foto">Elige una imagen para subir (PNG, JPG)</label>
 	<input type="file" id="foto" placeholder="Foto" name="fotos" onchange="updateImageDisplay()" accept=
-	".apng, .bmp, .gif, .jpeg, .pjpeg, .png, .svg+xml, .tiff, .webp, .x-icon" multiple>
+	".apng, .bmp, .gif, .jpg, .jpeg, .pjpeg, .png, .svg+xml, .tiff, .webp, .x-icon" multiple>
 	<div class="preview">
 		<i class="aniadir fa fa-plus popup"><span class="popuptext" id="myPopup">Debes añadir al menos una imagen</span></i>
 	</div>

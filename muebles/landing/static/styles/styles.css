@@ -39,6 +39,45 @@ body {
 .navigation > .last:hover{
 	border-radius: 0 8px 8px 0;
 }
+
+/***********************************************************/
+/********************PERFIL*********************************/
+/***********************************************************/
+.info-perfil {
+	display: grid;
+	grid-template-columns: 25% 25% 25% 25%;
+	grid-row-gap: 2em;
+	justify-items: center;
+	text-align: center;
+	grid-template-areas: 
+	". nom nom ."
+	"t1 t2 t3 t4"
+	"email org puesto tel"
+}
+
+.nom {
+	grid-area: nom;
+}
+
+.email {
+	grid-area: email;
+}
+
+.organizacion {
+	grid-area: org;
+}
+
+.tel {
+	grid-area: tel;
+}
+
+.puesto {
+	grid-area: puesto;
+}
+
+.tel {
+	grid-area: tel;
+}
 /***********************************************************/
 /********************MUEBLES********************************/
 /***********************************************************/

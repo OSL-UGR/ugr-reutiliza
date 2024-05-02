@@ -13,13 +13,14 @@
 
 {% block content %}
 {% if listaMuebles %}
+<h1>Catalogo</h1>
 <div class="muebles-table">
 	{% for mueble in listaMuebles %}
 	<div onclick='location.href="/{{mueble.id}}/post";' class="mueble-container">
 		<h2>{{ mueble.nombre }}</h2>
 		<br>
 		{% load static %}
-		<img src="{{ mueble.main_image.url }}" alt="Imagen errónea">
+		<img src="{{ mueble.main_image.url }}" alt="Imágen mueble con id {{mueble.id}}">
 		<h3>Ubicación:</h3>
 		<p>{{ mueble.ubiInicial }}</p>
 	</div>
@@ -36,7 +37,7 @@
 <div class="info-mueble">
 	<h1 class="nom">{{ mueble.nombre }}</h1>
 	{% for image in images %}
-	<img src="{{image.url}}" class="foto zoom">
+	<img src="{{image.url}}" class="foto zoom" alt="Foto de {{ mueble.nombre }} en {{ mueble.ubiInicial }}">
 	{% endfor %}
 	<div class="circle right">
 		<i class="arrow"></i>

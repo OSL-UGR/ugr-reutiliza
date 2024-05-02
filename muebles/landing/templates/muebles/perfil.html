@@ -8,7 +8,27 @@
 {% endblock %}
 
 {% block content %}
-<p>{{user.email}}</p>
+<div class="info-perfil">
+	<div class="nom">
+		<h1>{{user.nombre}} {{user.apellidos}}</h1>
+	</div>
+	<t1>Email</t1>
+	<div class="email">
+		<p>{{user.email}}</p>
+	</div>
+	<t2>Organizacion</t2>
+	<div class="organizacion">
+		<p>{{user.organizacion}}</p>
+	</div>
+	<t3>Puesto</t3>
+	<div class="puesto">
+		<p>{{user.puesto}}</p>
+	</div>
+	<t4>Teléfono</t4>
+	<div class="tel">
+		<p>{{user.telefono}}</p>
+	</div>
+</div>
 {% endblock %}
 
 {% block logged %}
