@@ -9,6 +9,14 @@ python -m venv ./env
 
 Esto nos creará una carpeta llamada env que contiene todos los datos del entorno virtual.
 
+Posteriormente podemos acceder a este entorno con:
+
+```
+    source env/bin/activate
+```
+
+Esto funciona en bash y zsh, entre otros, sin embargo es necesario adaptarlo al sistema y terminal que se use.
+
 ## Creación del proyecto de Django
 
 [Ampliar:]
@@ -34,12 +42,12 @@ Para la configuración de desarrollo se ha usado un contenedor de docker
 con postgres  en la última versión (a fecha de este documento es la 16.2)
 
 ## Contenedor de docker
-`
+```
 docker run --name postgres -e POSTGRES_PASSWORD=password
 -p 5432:5432 -d postgres
-`
+```
 
-Este comando (`docker run ...`) sirve para crear un contenedor de docker.
+El comando anterior (`docker run ...`) sirve para crear un contenedor de docker.
 
 ### Parámetros:
 - **--name** define el nombre que tendrá el contenedor.
@@ -58,38 +66,44 @@ postgres, dado que hemos puesto postgres, por defecto se instalará la última
 imagen.
 
 ## Configuración inicial.
-Para que la web pueda funcionar, es necesario crear la base de datos en 
-postgres, esto lo hacemos ejecutando el comando 
-`CREATE DATABASE {nombreDeLaBD};` dentro del postgres.
+Para que la web pueda funcionar, es necesario crear la base de datos en
+postgres, para esto los pasos son:
 
+### Entrar al docker
 En docker se haría accediendo al contenedor y llamando a psql:
 ```bash
 docker exec -it postgres bash
 ```
 Este primer comando ejecuta bash dentro del contenedor de postgres.
 
+### Conectarse a postgres
 **A partir de aquí es común a una instalación de postgres local**
 ```bash
 psql -U postgres
 ```
+
+### Creamos la base de datos
+```CREATE DATABASE {nombreDeLaBD};```
+
 Con este comando accedemos a la base de datos con el usuario postgres (el 
 usuario por defecto) y una vez dentro de postgres ejecutamos el 
 `CREATE DATABASE`.
 
 ## Configuración de Django
 
-El formato de django para la configuración es el siguiente:
-
+El formato de django para la configuración  es el siguiente:
+*La configuración de django se suele guardar en el archivo settings.py almacenado en el proyecto,*
+en nuestro caso el proyecto princpial es muebles.
 ```Python
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mueblesitos',
-        'USER': 'postgres',
-        'PASSWORD': 'password',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
+'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': 'mueblesitos',
+    'USER': 'postgres',
+    'PASSWORD': 'password',
+    'HOST': '127.0.0.1',
+    'PORT': '5432',
 }
+
 ```
 
 ### Opciones:
@@ -119,3 +133,11 @@ es localhost (127.0.0.1).
 de postgres por defecto es el 5432, (En nuestro caso hemos mapeado el 5432 del 
 contenedor directamente al 5432 del localhost, por lo tanto coinciden).
 
+## Fuentes:
+[Entorno virtual](https://docs.python.org/3/library/venv.html)
+
+[Documentación de django](https://www.djangoproject.com/)
+
+[Documentacion de docker](https://www.docker.com/)
+
+[Tutorial postgresql en docker](https://towardsdatascience.com/local-development-set-up-of-postgresql-with-docker-c022632f13ea)
