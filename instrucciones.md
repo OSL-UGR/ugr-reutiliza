@@ -83,11 +83,12 @@ psql -U postgres
 ```
 
 ### Creamos la base de datos
+En nuestro caso **{nombreDeLaBD}** es **"mueblesitos"**, por tanto en todos los lugares
+donde aparezca mueblesitos, en caso de usar un nombre diferente, tendría que
+ser modificado.
+
 ```CREATE DATABASE {nombreDeLaBD};```
 
-Con este comando accedemos a la base de datos con el usuario postgres (el 
-usuario por defecto) y una vez dentro de postgres ejecutamos el 
-`CREATE DATABASE`.
 
 ## Configuración de Django
 
