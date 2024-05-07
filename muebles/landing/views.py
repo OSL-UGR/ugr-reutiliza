@@ -155,8 +155,10 @@ def logoutPage(request):
 @login_required
 def perfil(request):
     user = request.user
+    listaMuebles = Mueble.objects.filter(ofertante=user)
     context = {
             "user": user,
+            "listaMuebles": listaMuebles,
             }
     return render(request, "muebles/perfil.html", context)
 

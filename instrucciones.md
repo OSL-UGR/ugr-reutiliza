@@ -2,7 +2,12 @@
 
 ## Creación del entorno virtual
 
-Dentro 
+Dentro del directorio raíz, ejecutamos:
+```bash
+python -m venv ./env
+```
+
+Esto nos creará una carpeta llamada env que contiene todos los datos del entorno virtual.
 
 ## Creación del proyecto de Django
 

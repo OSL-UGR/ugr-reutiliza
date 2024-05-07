@@ -29,8 +29,25 @@
 		<p>{{user.telefono}}</p>
 	</div>
 </div>
+{% if listaMuebles %}
+<div class="muebles-table">
+	{% for mueble in listaMuebles %}
+	<div onclick='location.href="/{{mueble.id}}/post";' class="mueble-container">
+		<h2>{{ mueble.nombre }}</h2>
+		<br>
+		{% load static %}
+		<img src="{{ mueble.main_image.url }}" alt="Imágen mueble con id {{mueble.id}}">
+		<h3>Ubicación:</h3>
+		<p>{{ mueble.ubiInicial }}</p>
+	</div>
+	{% endfor %}
+</div>
+{% elif not mueble %}
+<div class="muebles-table">
+	<p>No muebles are available</p>
+</div>
+{% endif %}
 {% endblock %}
-
 {% block logged %}
 <li class="last" onclick='location.href="/logout";'>Log out</a></li>
 {% endblock %}
