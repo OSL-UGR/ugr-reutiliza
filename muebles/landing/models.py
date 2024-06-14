@@ -2,14 +2,12 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from django.utils.deconstruct import deconstructible
 from .managers import CustomUserManager
 from django.db.models.signals import pre_delete, pre_save
 from django.dispatch import receiver
 import os
 
 
-@deconstructible
 class Usuario(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), max_length=100,
                               primary_key=True)

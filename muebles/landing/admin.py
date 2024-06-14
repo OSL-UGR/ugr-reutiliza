@@ -33,7 +33,6 @@ class Admin(UserAdmin):
                 )
     search_fields = ("email", "organizacion")
     ordering = ("email",)
-    readonly_fields = ("email",)
 
 
 class MuebleAdmin(admin.ModelAdmin):

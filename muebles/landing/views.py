@@ -86,7 +86,6 @@ def modifyMueble(request, mueble_id):
             "mueble": mueble,
             "fotos": fotoData,
             }
-    print(fotoData)
     if (permisoModificar(request.user, mueble_id)):
         if (request.method == "POST"):
             mueble.nombre = request.POST['nombre']
