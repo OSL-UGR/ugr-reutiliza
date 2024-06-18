@@ -15,16 +15,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.contrib.sitemaps.views import sitemap
 from landing.sitemaps import LandingSitemap
 
+URL = 'muebles/'
+
 sitemaps = {
-    'landing': LandingSitemap,
-}
+        'landing': LandingSitemap,
+        }
 
 urlpatterns = [
-    path('', include("landing.urls"), name='landing'),
-    path('admin/', admin.site.urls, name='admin'),
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap')
-]
+        path(f'{URL}', include('landing.urls'), name='landing'),
+        path(f'{URL}admin/', admin.site.urls, name='admin'),
+        path(f'{URL}sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+        path('', include('django_prometheus.urls'))
+        ]

@@ -16,7 +16,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -24,9 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-!ps7i_pycpqk)@2flqesc7=6xby0r1#vi+*uv%d_jt+v4*nshy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-
+DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,10 +35,12 @@ INSTALLED_APPS = [
         'django.contrib.staticfiles',
         'django_extensions',
         'django.contrib.sitemaps',
+        'django_prometheus',
         'landing'
         ]
 
 MIDDLEWARE = [
+        'django_prometheus.middleware.PrometheusBeforeMiddleware',
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
@@ -49,6 +48,7 @@ MIDDLEWARE = [
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'django_prometheus.middleware.PrometheusAfterMiddleware'
         ]
 
 ROOT_URLCONF = 'muebles.urls'
@@ -71,7 +71,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'muebles.wsgi.application'
 
-ALLOWED_HOSTS = ['127.0.0.1', '172.*.*.*']
+ALLOWED_HOSTS = ['127.0.0.1', '172.*.*.*', 'landing.parallex.es', '192.168.1.51', 'localhost']
+CSRF_TRUSTED_ORIGINS = ['https://landing.parallex.es']
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -135,9 +136,9 @@ GRAPH_MODELS = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = "/media/"
+MEDIA_URL = "muebles/media/"
 
-STATIC_URL = 'static/'
+STATIC_URL = 'muebles/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'landing/static')
 
 # Default primary key field type

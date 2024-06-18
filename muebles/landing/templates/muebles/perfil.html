@@ -1,9 +1,9 @@
 {% extends 'index.html' %}
 
 {% block pages %}
-<li onclick='location.href="/";'>Catálogo</a></li>
+<li onclick='location.href="/{{URL}}";'>Catálogo</a></li>
 {% if user.is_staff or user.is_superuser %}
-<li onclick='location.href="/add";'>Añadir mueble</a></li>
+<li onclick='location.href="/{{URL}}add";'>Añadir mueble</a></li>
 {% endif %}
 {% endblock %}
 
@@ -32,7 +32,7 @@
 {% if listaMuebles %}
 <div class="muebles-table">
 	{% for mueble in listaMuebles %}
-	<div onclick='location.href="/{{mueble.id}}/post";' class="mueble-container">
+	<div onclick='location.href="/{{URL}}{{mueble.id}}/post";' class="mueble-container">
 		<h2>{{ mueble.nombre }}</h2>
 		<br>
 		{% load static %}
@@ -49,5 +49,5 @@
 {% endif %}
 {% endblock %}
 {% block logged %}
-<li class="last" onclick='location.href="/logout";'>Log out</a></li>
+<li class="last" onclick='location.href="/{{URL}}logout";'>Log out</a></li>
 {% endblock %}

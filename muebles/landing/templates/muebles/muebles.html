@@ -3,12 +3,12 @@
 
 {% block pages %}
 {% if mueble %}
-<li onclick='location.href="/";'>Catálogo</a></li>
+<li onclick='location.href="/{{URL}}";'>Catálogo</a></li>
 {% endif %}
 {% if user.is_staff or user.is_superuser %}
-<li onclick='location.href="/add";'>Añadir mueble</a></li>
+<li onclick='location.href="/{{URL}}add";'>Añadir mueble</a></li>
 {% endif %}
-<li onclick='location.href="/perfil";'>Perfil</a></li>
+<li onclick='location.href="/{{URL}}perfil";'>Perfil</a></li>
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,7 @@
 <h1>Catalogo</h1>
 <div class="muebles-table">
 	{% for mueble in listaMuebles %}
-	<div onclick='location.href="/{{mueble.id}}/post";' class="mueble-container">
+	<div onclick='location.href="/{{URL}}{{mueble.id}}/post";' class="mueble-container">
 		<h2>{{ mueble.nombre }}</h2>
 		<br>
 		{% load static %}
@@ -54,7 +54,7 @@
 			<input class="button cancelar" type="button" value="Cancelar" onclick='no()'>
 		</div>
 	</form>
-	<input class="button modify" type="button" value="Modificar" onclick='location.href="/{{ mueble.id }}/modify";'>
+	<input class="button modify" type="button" value="Modificar" onclick='location.href="/{{URL}}{{ mueble.id }}/modify";'>
 	{% endif %}
 	{% if demandante == None and user != ofertante%}
 	<form action="book" class="book-info" method="post">
@@ -112,5 +112,5 @@
 {% endblock %}
 
 {% block logged %}
-<li class="last" onclick='location.href="/logout";'>Log out</a></li>
+<li class="last" onclick='location.href="/{{URL}}logout";'>Log out</a></li>
 {% endblock %}

@@ -12,19 +12,19 @@
 	<body>
 		<ul class="navigation">
 			{% block pages %}
-			<li onclick='location.href="/";'>Home</a></li>
-			<li onclick='location.href="/add";'>Añadir mueble</a></li>
-			<li onclick='location.href="/perfil";'>Perfil</a></li>
+			<li onclick='location.href="/{{URL}}";'>Home</a></li>
+			<li onclick='location.href="/{{URL}}add";'>Añadir mueble</a></li>
+			<li onclick='location.href="/{{URL}}perfil";'>Perfil</a></li>
 			{% endblock %}
 			{% block logged %}
-			<li class="last" onclick='location.href="/logout";'>Log out</a></li>
+			<li class="last" onclick='location.href="/{{URL}}logout";'>Log out</a></li>
 			{% endblock %}
 		</ul>
 
 		{% block content %}
 
 		{% endblock %}
-		<a href="/sitemap.xml">Sitemap</a>
+		<a href="/{{URL}}sitemap.xml">Sitemap</a>
 	</body>
 
 </html>

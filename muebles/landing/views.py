@@ -9,7 +9,7 @@ from .models import Mueble, Foto, Usuario
 import json
 import smtplib
 
-
+URL = 'muebles/'
 backend = SettingsBackend()
 
 
@@ -40,13 +40,17 @@ def index(request):
     listaMuebles = Mueble.objects.order_by("-id")
     context = {
             "listaMuebles": listaMuebles,
+            "URL": URL
             }
     return render(request, "muebles/muebles.html", context)
 
 
 def loginPage(request):
+    context = {
+            "URL": URL,
+            }
     if request.user.is_authenticated:
-        return render(request, "muebles/muebles.html")
+        return render(request, "muebles/muebles.html", context)
 
     elif (request.method == "POST"):
         email = request.POST['email']
@@ -55,12 +59,12 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
-            return redirect("/")
+            return redirect("index")
         else:
             return redirect("login")
 
     else:
-        return render(request, "muebles/login.html")
+        return render(request, "muebles/login.html", context)
 
 
 @login_required
@@ -69,9 +73,9 @@ def bookMueble(request, mueble_id):
     if (request.method == "POST" and mueble.demandante is None):
         mueble.demandante = request.user
         mueble.save()
-        return redirect(f"/{mueble_id}/post")
+        return redirect(f"/{URL}{mueble_id}/post")
     else:
-        return redirect("/")
+        return redirect("index")
 
 
 @login_required
@@ -85,6 +89,7 @@ def modifyMueble(request, mueble_id):
             "action": 'modify',
             "mueble": mueble,
             "fotos": fotoData,
+            "URL": URL
             }
     if (permisoModificar(request.user, mueble_id)):
         if (request.method == "POST"):
@@ -100,10 +105,10 @@ def modifyMueble(request, mueble_id):
             for img in fotos[1:]:
                 foto = Foto(mueble=mueble, imagen=img)
                 foto.save()
-            return redirect(f"/{mueble_id}/post")
+            return redirect(f"/{URL}{mueble_id}/post")
         else:
             return render(request, "muebles/addMueble.html", context)
-    return redirect("/")
+    return redirect("index")
 
 
 @login_required
@@ -111,6 +116,7 @@ def addMueble(request):
     context = {
             'action': 'add',
             'fotos': '[]',
+            'URL': URL
             }
     if (permisoAñadir(request.user)):
         if (request.method == "POST"):
@@ -128,10 +134,10 @@ def addMueble(request):
             for img in fotos[1:]:
                 foto = Foto(mueble=mueble, imagen=img)
                 foto.save()
-            return redirect("/")
+            return redirect("index")
         else:
             return render(request, "muebles/addMueble.html", context)
-    return redirect("/")
+    return redirect("index")
 
 
 @login_required
@@ -142,13 +148,13 @@ def deleteMueble(request, mueble_id):
             mueble.delete()
         else:
             return HttpResponse('Unauthorized', status=401)
-    return redirect("/")
+    return redirect("index")
 
 
 @login_required
 def logoutPage(request):
     logout(request)
-    return redirect("/")
+    return redirect("index")
 
 
 @login_required
@@ -158,6 +164,7 @@ def perfil(request):
     context = {
             "user": user,
             "listaMuebles": listaMuebles,
+            "URL": URL
             }
     return render(request, "muebles/perfil.html", context)
 
@@ -179,5 +186,6 @@ def post(request, mueble_id):
             'demandante': demandante,
             'images': imagenes,
             'user': usuario,
+            "URL": URL
             }
     return render(request, "muebles/muebles.html", context)
