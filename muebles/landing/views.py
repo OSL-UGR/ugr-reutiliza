@@ -100,6 +100,7 @@ def modifyMueble(request, mueble_id):
             mueble.descripcion = request.POST['desc']
             mueble.dimensiones = request.POST['dim']
             mueble.ubiInicial = request.POST['ubiI']
+            mueble.cantidad = request.POST['cant']
             mueble.save()
 
             for img in fotos[1:]:
@@ -113,6 +114,7 @@ def modifyMueble(request, mueble_id):
 
 @login_required
 def addMueble(request):
+    
     context = {
             'action': 'add',
             'fotos': '[]',
@@ -127,9 +129,11 @@ def addMueble(request):
             dim = request.POST['dim']
             desc = request.POST['desc']
             ubiI = request.POST['ubiI']
+            cant = request.POST['cant']
             mueble = Mueble(nombre=nombre, main_image=main_img,
                             descripcion=desc, ubiInicial=ubiI,
-                            ofertante=request.user, dimensiones=dim)
+                            ofertante=request.user, dimensiones=dim,
+                            cantidad=cant)
             mueble.save()
             for img in fotos[1:]:
                 foto = Foto(mueble=mueble, imagen=img)

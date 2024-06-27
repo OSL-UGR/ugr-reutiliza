@@ -36,6 +36,7 @@
 {% if mueble %}
 <div class="info-mueble">
 	<h1 class="nom">{{ mueble.nombre }}</h1>
+	<h2 class="cant">Restantes: {{ mueble.cantidad }}</h2>
 	{% for image in images %}
 	<img src="{{image.url}}" class="foto zoom" alt="Foto de {{ mueble.nombre }} en {{ mueble.ubiInicial }}">
 	{% endfor %}
