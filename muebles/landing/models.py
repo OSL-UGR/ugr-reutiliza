@@ -50,6 +50,7 @@ class Mueble(models.Model):
                                    on_delete=models.DO_NOTHING, null=True)
     ubiInicial = models.CharField(max_length=512, default="")
     ubiFinal = models.CharField(max_length=512, default="")
+    cantidad = models.IntegerField(default=1)
 
     def get_absolute_url(self):
         return f'/{self.id}/post'

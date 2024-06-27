@@ -29,8 +29,20 @@
 	<label for="desc"><b>Breve descripción:</b></label>
 	<input type="text" id="desc" value="{{ mueble.descripcion }}" placeholder="Descripción" name="desc" required>
 
-	<label for="ubiI"><b>Ubicación:</b></label>
-	<input type="text" id="ubiI" value="{{ mueble.ubiInicial }}" placeholder="Ubicación Inicial" name="ubiI" required>
+	<div class="subgrid">
+		<div class="subgrid-item">
+			<label for="ubiI"><b>Ubicación:</b></label>
+			<input type="text" id="ubiI" class="ubi" value="{{ mueble.ubiInicial }}" placeholder="Ubicación Inicial" name="ubiI" required>
+		</div>
+		<div class="subgrid-item">
+			<label for="cant"><b>Cantidad:</b></label>
+			{% if mueble %}
+			<input type="number" class="intInput" id="cant" class="cant" value="{{ mueble.cantidad }}" placeholder="Cantidad" name="cant" style="font-size:2em" required>
+			{% else %}
+			<input type="number" class="intInput" id="cant" class="cant" value=1 placeholder="Cantidad" name="cant" required>
+			{% endif %}
+		</div>
+	</div>
 
 	<label for="foto">Elige una imagen para subir (PNG, JPG)</label>
 	<input type="file" id="foto" placeholder="Foto" name="fotos" onchange="updateImageDisplay()" accept=

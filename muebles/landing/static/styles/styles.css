@@ -88,12 +88,17 @@ body {
 	text-align: center;
 	grid-template-areas: 
 	". nom nom ."
+	". cant cant ."
 	". foto foto ."
 	". left right ."
 	". modify delete ."
 	". book book ."
 	"t1 t2 t3 t4"
 	"cont1 cont2 cont3 cont4";
+}
+
+.cant {
+	grid-area: cant;
 }
 
 .nom {
@@ -325,17 +330,37 @@ t4 {
 }
 /* Add animation (fade out the popup) */
 @-webkit-keyframes fadeOut {
-  from {opacity: 1;visibility:visible} 
-  to {opacity: 0;visibility:hidden}
+	from {opacity: 1;visibility:visible} 
+	to {opacity: 0;visibility:hidden}
 }
 
 @keyframes fadeOut {
-  from {opacity: 1;visibility:visible}
-  to {opacity: 0;visibility:hidden}
+	from {opacity: 1;visibility:visible}
+	to {opacity: 0;visibility:hidden}
 }
 /***********************************************************/
 /*******************EDITAR MUEBLES**************************/
 /***********************************************************/
+.subgrid {
+	display: grid;
+    grid-template-columns: 85% 10%;
+	text-align: center;
+	gap:2%;
+}
+
+.subgrid-item {
+	width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.ubi {
+	grid-area: ubi;
+}
+
+.cant {
+	grid-area: cant;
+}
+
 #foto {
 	display: none;
 	cursor: default;
@@ -367,14 +392,14 @@ t4 {
 	position: absolute;
 	width:16px;
 	height:16px;
-	top: 20px; /* Adjust as needed */
-	right: 20px; /* Adjust as needed */
+	top: 20px;
+	right: 20px;
 	color: white;
 	background-color: black;
 	padding: 5px;
 	cursor: pointer;
-	border-radius: 50%; /* Makes it round */
-	z-index: 2; /* Ensure it's above the image */
+	border-radius: 50%;
+	z-index: 2;
 }
 .cross-overlay:hover {
 	opacity: 1;
@@ -407,8 +432,10 @@ t4 {
 .closebtn:hover {
 	color: black;
 }
+
 .addMueble{
 	width: 60%;
+    grid-template-columns: 1fr;
 	justify-self:center;
 	background-color: #fff;
 	padding: 2%;
@@ -419,11 +446,19 @@ t4 {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.addMueble > input{
-	height: 3em;
+
+.addMueble > input, .subgrid-item > input{
+	font-size: 1.30em;
 	margin: 2%;
 	border: none;
 	border-bottom: 2px solid #00308F;
+}
+
+.intInput {
+	height: 2em;
+	justify-self: center;
+	width: 3em;
+	text-align: center;
 }
 
 .publicar{
