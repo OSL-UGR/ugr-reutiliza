@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
 {% block pages %}
-<li onclick='location.href="/{{URL}}";'>Catálogo</a></li>
+<li class="first" onclick='location.href="/{{URL}}";'>Catálogo</a></li>
 {% if user.is_staff or user.is_superuser %}
 <li onclick='location.href="/{{URL}}add";'>Añadir mueble</a></li>
 {% endif %}
