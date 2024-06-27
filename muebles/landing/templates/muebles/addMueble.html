@@ -37,7 +37,7 @@
 		<div class="subgrid-item">
 			<label for="cant"><b>Cantidad:</b></label>
 			{% if mueble %}
-			<input type="number" class="intInput" id="cant" class="cant" value="{{ mueble.cantidad }}" placeholder="Cantidad" name="cant" style="font-size:2em" required>
+			<input type="number" class="intInput" id="cant" class="cant" value="{{ mueble.cantidad }}" placeholder="Cantidad" name="cant" required>
 			{% else %}
 			<input type="number" class="intInput" id="cant" class="cant" value=1 placeholder="Cantidad" name="cant" required>
 			{% endif %}
