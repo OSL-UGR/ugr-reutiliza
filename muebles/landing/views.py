@@ -2,24 +2,17 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-
 from .backends import SettingsBackend
-from .models import Mueble, Foto, Usuario
-
-import json
-import smtplib
+from .models import Mueble, Foto, Usuario, categorias as cat
 
 URL = 'muebles/'
 backend = SettingsBackend()
 
 
-def enviarEmail(demandante):
-    smtpObj = smtplib.SMTP()
+def mueblesCat(listaCat):
+    muebles = Mueble.objects.filter(categoria__in=listaCat)
 
-    sender = 'muebles@ejemplo.com'
-    receivers = ['gehibey464@dacgu.com']
-
-    smtpObj.sendmail(sender, receivers, message)
+    return muebles
 
 
 def permisoAñadir(email):
@@ -37,9 +30,26 @@ def permisoModificar(email, mueble_id):
 
 @login_required
 def index(request):
+
     listaMuebles = Mueble.objects.order_by("-id")
+    categorias = []
+    for i in range(len(cat)):
+        muebles = Mueble.objects.filter(categoria=cat[i][0])
+        categorias.insert(i, {"muebles": muebles,
+                              "text": cat[i][0],
+                              "num": len(muebles)})
+
+    seleccionadas = request.GET.getlist('checks')
+    if (len(seleccionadas) != 0):
+        print(seleccionadas)
+        listaMuebles = mueblesCat(seleccionadas)
+    else:
+        seleccionadas = categorias
+
     context = {
             "listaMuebles": listaMuebles,
+            "categorias": categorias,
+            "selected": seleccionadas,
             "URL": URL
             }
     return render(request, "muebles/muebles.html", context)
@@ -85,8 +95,14 @@ def modifyMueble(request, mueble_id):
     fotos = Foto.objects.filter(mueble=mueble)
     for foto in fotos:
         fotoData.append(foto.imagen.url)
+
+    categorias = []
+    for i in range(len(cat)):
+        categorias.insert(i, cat[i][0])
+
     context = {
             "action": 'modify',
+            "categorias": categorias,
             "mueble": mueble,
             "fotos": fotoData,
             "URL": URL
@@ -101,6 +117,7 @@ def modifyMueble(request, mueble_id):
             mueble.dimensiones = request.POST['dim']
             mueble.ubiInicial = request.POST['ubiI']
             mueble.cantidad = request.POST['cant']
+            mueble.categoria = request.POST['cat']
             mueble.save()
 
             for img in fotos[1:]:
@@ -114,10 +131,13 @@ def modifyMueble(request, mueble_id):
 
 @login_required
 def addMueble(request):
-    
+    categorias = []
+    for i in range(len(cat)):
+        categorias.insert(i, cat[i][0])
     context = {
             'action': 'add',
             'fotos': '[]',
+            'categorias': categorias,
             'URL': URL
             }
     if (permisoAñadir(request.user)):
@@ -130,10 +150,11 @@ def addMueble(request):
             desc = request.POST['desc']
             ubiI = request.POST['ubiI']
             cant = request.POST['cant']
+            categ = request.POST['cat']
             mueble = Mueble(nombre=nombre, main_image=main_img,
                             descripcion=desc, ubiInicial=ubiI,
                             ofertante=request.user, dimensiones=dim,
-                            cantidad=cant)
+                            cantidad=cant, categoria=categ)
             mueble.save()
             for img in fotos[1:]:
                 foto = Foto(mueble=mueble, imagen=img)

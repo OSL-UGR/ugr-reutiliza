@@ -23,12 +23,38 @@
 	<label for="nombre"><b>Nombre:</b></label>
 	<input type="text" id="nombre" value="{{ mueble.nombre }}" placeholder="Nombre" name="nombre" required>
 
-	<label for="dim"><b>Dimensiones:</b></label>
-	<input type="text" id="dim" value="{{ mueble.dimensiones }}" placeholder="Dimensiones" name="dim" required multiple>
 
 	<label for="desc"><b>Breve descripción:</b></label>
 	<input type="text" id="desc" value="{{ mueble.descripcion }}" placeholder="Descripción" name="desc" required>
+	<div class="subgrid">
+		<div class="subgrid-item">
+			<label for="dim"><b>Dimensiones:</b></label>
+			<input type="text" id="dim" value="{{ mueble.dimensiones }}" placeholder="Dimensiones" name="dim" required multiple>
+		</div>
+		<div class="subgrid-item">
+				<label for="cant"><b>Categoria:</b></label>
+			<select name="cat" id="cat" class="selectCat">
+				{% if mueble %}
+				{% for categoria in categorias %}
 
+				{% if categoria == mueble.categoria %}
+				<option value="{{ categoria }}" selected>{{ categoria }}</option>
+
+				{% else %}
+				<option value="{{ categoria }}">{{ categoria }}</option>
+				{% endif %}
+
+				{% endfor %}
+
+				{% else %}
+
+				{% for categoria in categorias %}
+				<option value="{{ categoria }}">{{ categoria }}</option>
+				{% endfor %}
+				{% endif %}
+			</select>
+		</div>
+	</div>
 	<div class="subgrid">
 		<div class="subgrid-item">
 			<label for="ubiI"><b>Ubicación:</b></label>
