@@ -60,7 +60,7 @@ class Mueble(models.Model):
     ubiFinal = models.CharField(max_length=512, default="")
     cantidad = models.IntegerField(default=1)
     categoria = models.CharField(choices=categorias,
-                                 default=categorias[0])
+                                 default=categorias[0][0])
 
     def get_absolute_url(self):
         return f'/{self.id}/post'
