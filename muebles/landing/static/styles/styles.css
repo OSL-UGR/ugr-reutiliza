@@ -546,7 +546,8 @@ t4 {
 	border-radius: 1em;
 	row-gap: 2%;
     align-content: start;
-
+	height: min-content;
+	padding-bottom: 1em;
 }
 
 .categoria {
