@@ -12,31 +12,65 @@
 {% endblock %}
 
 {% block content %}
-{% if listaMuebles %}
-<h1>Catalogo</h1>
-<div class="muebles-table">
-	{% for mueble in listaMuebles %}
-	<div onclick='location.href="/{{URL}}{{mueble.id}}/post";' class="mueble-container">
-		<h2>{{ mueble.nombre }}</h2>
-		<br>
-		{% load static %}
-		<img src="{{ mueble.main_image.url }}" alt="Imágen mueble con id {{mueble.id}}">
-		<h3>Ubicación:</h3>
-		<p>{{ mueble.ubiInicial }}</p>
+{% if not mueble %}
+<div class="layout-catalog">
+	<div class="categorias">
+		<h2>Categorías</h2>
+
+		<form id="checkForm" class="checkForm">
+			{% for categoria in categorias %}
+			<div class="categoria">
+
+				<label class="textCat">
+					{% if categoria.text in selected %}
+					<input type="checkbox" name="checks" value="{{ categoria.text }}" checked onchange="sendCheckForm()"> {{ categoria.text }}
+					{% else %}
+					<input type="checkbox" name="checks" value="{{ categoria.text }}" onchange="sendCheckForm()"> {{ categoria.text }}
+					{% endif %}
+				</label>
+
+				<p class="numCat">{{ categoria.num }}</p>
+			</div>
+			{% endfor %}
+
+		</form>
+
 	</div>
-	{% endfor %}
+{% if listaMuebles %}
+	<div class="muebles">
+		<h1>Catalogo</h1>
+		<div class="muebles-table">
+			{% for mueble in listaMuebles %}
+			<div onclick='location.href="/{{URL}}{{mueble.id}}/post";' class="mueble-container">
+				<h2>{{ mueble.nombre }}</h2>
+				<br>
+				{% load static %}
+				<img src="{{ mueble.main_image.url }}" alt="Imágen mueble con id {{mueble.id}}">
+				<h3>Ubicación:</h3>
+				<p>{{ mueble.ubiInicial }}</p>
+			</div>
+			{% endfor %}
 
-</div>
+		</div>
 {% elif not mueble %}
-<div class="muebles-table">
-	<p>No muebles are available</p>
-</div>
+		<div class="muebles-table">
+			<p>No muebles are available</p>
+		</div>
 {% endif %}
+	</div>
+</div>
 
-{% if mueble %}
+{% elif mueble %}
 <div class="info-mueble">
 	<h1 class="nom">{{ mueble.nombre }}</h1>
-	<h2 class="cant">Restantes: {{ mueble.cantidad }}</h2>
+	<div class="cant">
+	<h2 class="cant">Restantes: </h2>
+	<p>{{ mueble.cantidad }}</p>
+	</div>
+	<div class="cat">
+		<h2>Categoria:</h2>
+		<p>{{ mueble.categoria }}</p>
+	</div>
 	{% for image in images %}
 	<img src="{{image.url}}" class="foto zoom" alt="Foto de {{ mueble.nombre }} en {{ mueble.ubiInicial }}">
 	{% endfor %}
@@ -89,25 +123,33 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js"></script>
 <script src="{% static 'js/muebles.js'%}"></script>
 
+<script> 
+	const checkForm = document.querySelector('#checkForm');
+
+	function sendCheckForm() {
+		checkForm.submit();
+	}
+</script>
+
 <script>
 	const elem = document.querySelector('.delete');
 	const div = document.querySelector('#confirm');
 	const form = document.querySelector('.delete-form');
 
 	function changeText() {
-			elem.style.opacity='0';
-			elem.style.zIndex='-1';
-			div.style.opacity='1';
-			div.style.zIndex='1';
+		elem.style.opacity='0';
+		elem.style.zIndex='-1';
+		div.style.opacity='1';
+		div.style.zIndex='1';
 	}
 	function si(){
 		form.submit();
 	}
 	function no(){
-			div.style.opacity='0';
-			div.style.zIndex='-1';
-			elem.style.opacity='1';
-			elem.style.zIndex='1';
+		div.style.opacity='0';
+		div.style.zIndex='-1';
+		elem.style.opacity='1';
+		elem.style.zIndex='1';
 	}
 </script>
 {% endblock %}

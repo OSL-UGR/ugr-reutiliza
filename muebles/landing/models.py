@@ -8,6 +8,14 @@ from django.dispatch import receiver
 import os
 
 
+categorias = (
+        ('Silla', 'Silla'),
+        ('Mesa', 'Mesa'),
+        ('Armario', 'Armario'),
+        ('Pizarra', 'Pizarra'),
+        )
+
+
 class Usuario(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), max_length=100,
                               primary_key=True)
@@ -51,6 +59,8 @@ class Mueble(models.Model):
     ubiInicial = models.CharField(max_length=512, default="")
     ubiFinal = models.CharField(max_length=512, default="")
     cantidad = models.IntegerField(default=1)
+    categoria = models.CharField(choices=categorias,
+                                 default=categorias[0])
 
     def get_absolute_url(self):
         return f'/{self.id}/post'
