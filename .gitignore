@@ -163,3 +163,4 @@ cython_debug/
 *images/
 Todo
 requirements.in
+credentials.txt
