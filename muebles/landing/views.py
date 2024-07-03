@@ -2,11 +2,69 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from .backends import SettingsBackend
 from .models import Mueble, Foto, Usuario, Reserva, categorias as cat
+from threading import Thread
+import smtplib
+from email.mime.text import MIMEText
+
 
 URL = 'muebles/'
 backend = SettingsBackend()
+
+port = 587
+smtp_server = "smtp.ugr.es"
+
+file = open(settings.PROJECT_PATH + "/credentials.txt", "r")
+email = file.readline().strip('\n')
+password = file.readline().strip('\n')
+file.close()
+
+
+def mensajeLiberacion(nombre, cantidad, demandante, correo, receptor,
+                      restantes):
+    text = f"""\
+    El usuario {demandante} con correo {correo} ha liberado
+    {cantidad} elementos de este mueble.
+
+    Ahora quedan {restantes}.
+    """
+
+    # Create MIMEText object
+    message = MIMEText(text, "plain")
+    message["Subject"] = f"Liberacion reserva {nombre}"
+    message["From"] = email
+    message["To"] = receptor
+
+    return message
+
+
+def mensajeReserva(nombre, cantidad, demandante, correo, receptor,
+                   restantes):
+    text = f"""\
+    El usuario {demandante} con correo {correo} ha reservado
+    {cantidad} elementos de este mueble.
+
+    Ahora quedan {restantes}.
+    """
+
+    # Create MIMEText object
+    message = MIMEText(text, "plain")
+    message["Subject"] = f"Nueva reserva {nombre}"
+    message["From"] = email
+    message["To"] = receptor
+
+    return message
+
+
+def sendMail(email, password, message, receptor):
+    with smtplib.SMTP(smtp_server, port) as server:
+        server.ehlo()
+        server.starttls()
+        server.login(email, password)
+        server.sendmail(email, receptor, message.as_string())
+        server.close()
 
 
 def mueblesCat(listaCat):
@@ -80,9 +138,25 @@ def loginPage(request):
 @login_required
 def unbookMueble(request, mueble_id):
     mueble = Mueble.objects.get(pk=mueble_id)
+    reservas = Reserva.objects.filter(mueble=mueble)
     reserva = Reserva.objects.get(mueble=mueble, demandante=request.user)
 
+    total = 0
+    for reserva in reservas:
+        total += reserva.cantidad
+
+    restantes = mueble.cantidad - total
+    demandante = reserva.demandante
+
     if (request.method == "POST"):
+        mensaje = mensajeLiberacion(mueble.nombre, reserva.cantidad,
+                                    demandante.nombre + " " +
+                                    demandante.apellidos,
+                                    demandante.email, mueble.ofertante.email,
+                                    restantes + reserva.cantidad)
+
+        Thread(target=sendMail,
+               args=(email, password, mensaje, mueble.ofertante.email)).start()
         reserva.delete()
         return redirect(f"/{URL}{mueble_id}/post")
     else:
@@ -105,6 +179,7 @@ def bookMueble(request, mueble_id):
         total += reserva.cantidad
 
     restantes = mueble.cantidad - total
+    demandante = Usuario.objects.get(pk=request.user)
 
     if (request.method == "POST" and restantes - peticion >= 0):
         if (existente):
@@ -113,6 +188,14 @@ def bookMueble(request, mueble_id):
         else:
             reserva = Reserva(mueble=mueble, cantidad=peticion,
                               demandante=request.user)
+        mensaje = mensajeReserva(mueble.nombre, peticion,
+                                 demandante.nombre + " " +
+                                 demandante.apellidos,
+                                 demandante.email, mueble.ofertante.email,
+                                 restantes - peticion)
+
+        Thread(target=sendMail,
+               args=(email, password, mensaje, mueble.ofertante.email)).start()
         reserva.save()
 
         return redirect(f"/{URL}{mueble_id}/post")
