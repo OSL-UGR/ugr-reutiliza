@@ -16,7 +16,7 @@ backend = SettingsBackend()
 port = 587
 smtp_server = "smtp.ugr.es"
 
-file = open(settings.PROJECT_PATH + "/credentials.txt", "r")
+file = open(str(settings.BASE_DIR) + "/credentials.txt", "r")
 email = file.readline().strip('\n')
 password = file.readline().strip('\n')
 file.close()
