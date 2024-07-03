@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.html import mark_safe
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import Mueble, Usuario, Foto
+from .models import Mueble, Usuario, Foto, Reserva
 
 
 class Admin(UserAdmin):
@@ -66,3 +66,4 @@ class FotoAdmin(admin.ModelAdmin):
 admin.site.register(Usuario, Admin)
 admin.site.register(Mueble, MuebleAdmin)
 admin.site.register(Foto, FotoAdmin)
+admin.site.register(Reserva)

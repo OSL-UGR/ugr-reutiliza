@@ -53,9 +53,6 @@ class Mueble(models.Model):
     ofertante = models.ForeignKey(Usuario, related_name="user_email_provider",
                                   on_delete=models.CASCADE,
                                   default=Usuario.get_default_pk)
-    demandante = models.ForeignKey(Usuario,
-                                   related_name="user_email_requester",
-                                   on_delete=models.DO_NOTHING, null=True)
     ubiInicial = models.CharField(max_length=512, default="")
     ubiFinal = models.CharField(max_length=512, default="")
     cantidad = models.IntegerField(default=1)
@@ -72,6 +69,14 @@ class Foto(models.Model):
 
     def get_absolute_url(self):
         return f'{self.imagen.url}'
+
+
+class Reserva(models.Model):
+    mueble = models.ForeignKey(Mueble, on_delete=models.CASCADE)
+    cantidad = models.IntegerField(default=1)
+    demandante = models.ForeignKey(Usuario,
+                                   on_delete=models.DO_NOTHING,
+                                   null=True)
 
 
 @receiver([pre_delete, pre_save], sender=Foto)

@@ -193,11 +193,33 @@ body {
 	color: white;
 }
 
+.book-ammount {
+	margin-top: 0.48em;
+    padding: 0.30em;
+    font-size:1.5em;
+	text-align: center;
+	align-self: center;
+	background: 0;
+    border: 0;
+	border-bottom: 2px solid #00308F;
+}
+
 .book-info {
 	width: 100%;
-	grid-area: book;
 	font-size: 1.3em;
 }
+
+.book-area {
+	grid-area: book;
+}
+
+.unbook {
+	height: 3em;
+	width: 90%;
+	background-color: #e72929;
+	color: white;
+}
+
 .book {
 	height: 3em;
 	width: 90%;
