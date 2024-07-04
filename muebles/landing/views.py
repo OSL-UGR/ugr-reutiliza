@@ -16,10 +16,27 @@ backend = SettingsBackend()
 port = 587
 smtp_server = "smtp.ugr.es"
 
-file = open(settings.PROJECT_PATH + "/credentials.txt", "r")
+file = open(str(settings.BASE_DIR) + "/credentials.txt", "r")
 email = file.readline().strip('\n')
 password = file.readline().strip('\n')
+inventoryEmail = file.readline().strip('\n')
 file.close()
+
+
+def mensajeInventarioReserva(nombreMueble, cantidad,
+                             demandante, puesto, organizacion, correo,
+                             correoInventario):
+
+    text = f"""\
+    {demandante}, {puesto}, de {organizacion} con correo {correo}
+    solicita {cantidad} del mueble {nombreMueble}.
+    """
+
+    message = MIMEText(text, "plain")
+    message["Subject"] = f"Reserva {nombreMueble}"
+    message["From"] = email
+    message["To"] = correoInventario
+    return message
 
 
 def mensajeLiberacion(nombre, cantidad, demandante, correo, receptor,
@@ -188,14 +205,20 @@ def bookMueble(request, mueble_id):
         else:
             reserva = Reserva(mueble=mueble, cantidad=peticion,
                               demandante=request.user)
+        nombreDemandante = demandante.nombre + " " + demandante.apellidos
         mensaje = mensajeReserva(mueble.nombre, peticion,
-                                 demandante.nombre + " " +
-                                 demandante.apellidos,
-                                 demandante.email, mueble.ofertante.email,
-                                 restantes - peticion)
+                                 nombreDemandante, demandante.email,
+                                 mueble.ofertante.email, restantes - peticion)
 
         Thread(target=sendMail,
                args=(email, password, mensaje, mueble.ofertante.email)).start()
+        mensaje = mensajeInventarioReserva(mueble.nombre, peticion,
+                                           nombreDemandante,
+                                           demandante.puesto,
+                                           demandante.organizacion,
+                                           demandante.email, inventoryEmail)
+        Thread(target=sendMail,
+               args=(email, password, mensaje, inventoryEmail)).start()
         reserva.save()
 
         return redirect(f"/{URL}{mueble_id}/post")
