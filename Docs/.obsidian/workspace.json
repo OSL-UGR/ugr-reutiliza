@@ -1,0 +1,240 @@
+{
+  "main": {
+    "id": "20d977de9b9d3643",
+    "type": "split",
+    "children": [
+      {
+        "id": "b056018f7fd1b0f3",
+        "type": "tabs",
+        "dimension": 47.70700636942675,
+        "children": [
+          {
+            "id": "63de8654d1600950",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Aplicación/Landing/Landing.md",
+                "mode": "source",
+                "backlinks": true,
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "678ecdc9593d43cf",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Aplicación/Landing/Landing.md",
+                "mode": "source",
+                "backlinks": true,
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "425609a1d73dd2e9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Aplicación/Mueble/Muebles.md",
+                "mode": "source",
+                "backlinks": true,
+                "source": false
+              }
+            }
+          }
+        ],
+        "currentTab": 2
+      },
+      {
+        "id": "ead3a366d359478c",
+        "type": "tabs",
+        "dimension": 52.29299363057325,
+        "children": [
+          {
+            "id": "ffaaf5382eac2306",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "graph",
+              "state": {},
+              "pinned": true
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "3e3cf3337060f640",
+    "type": "split",
+    "children": [
+      {
+        "id": "7d17b99ffeb3f119",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7a961f01a33ad729",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "byCreatedTimeReverse"
+              }
+            }
+          },
+          {
+            "id": "bf5833d560536b4b",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "tag:unstarted",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "747c35d735261d6b",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 306.5
+  },
+  "right": {
+    "id": "c0e3f03e8d577452",
+    "type": "split",
+    "children": [
+      {
+        "id": "346cfc03b6a1b4a2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cdde15c0a07fd7a2",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "c9e5074aa3c41d7f",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "aa799076554395d5",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "9067f0f44c34d067",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "graph:Open graph view": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "ffaaf5382eac2306",
+  "lastOpenFiles": [
+    "Aplicación/Mueble/Muebles.md",
+    "Aplicación/Landing/Templates.md",
+    "Aplicación/Landing/Templates/addMueble.html.md",
+    "Aplicación/Landing/Templates/login.html.md",
+    "Aplicación/Landing/Templates/index.html.md",
+    "Aplicación/Landing/Templates/muebles.html.md",
+    "Pasted image 20240515134438.png",
+    "Aplicación/Landing/Templates/perfil.html.md",
+    "Aplicación/Landing/styles.css.md",
+    "Aplicación/Landing/Templates",
+    "Aplicación/Landing/Landing.md",
+    "Aplicación/Landing/views.py.md",
+    "Aplicación/Mueble/settings.py.md",
+    "Aplicación/Landing/urls.py.md",
+    "Tutorial/HTML.md",
+    "Aplicación/Mueble/url.py.md",
+    "MueblesUGR.md",
+    "Tutorial/Aplicaciones/Managers.md",
+    "Tutorial/Aplicaciones/Forms.md",
+    "Tutorial/Aplicaciones/Aplicaciones.md",
+    "Tutorial/Aplicaciones/Sitemaps.md",
+    "Tutorial/Aplicaciones/Models.md",
+    "Tutorial/URLs.md",
+    "Tutorial/Aplicaciones/Views.md",
+    "Tutorial/Elementos de Django.md",
+    "Tutorial/Django.md",
+    "Aplicación/Landing/sitemaps.py.md",
+    "Pasted image 20240515131538.png",
+    "Pasted image 20240515133712.png",
+    "Pasted image 20240515134432.png",
+    "Pasted image 20240515132842.png",
+    "Pasted image 20240515132830.png",
+    "Pasted image 20240515132814.png",
+    "Pasted image 20240515125913.png",
+    "Pasted image 20240515125716.png",
+    "Pasted image 20240515125521.png",
+    "Tutorial.zip",
+    "Untitled.canvas",
+    "Tutorial/Aplicaciones",
+    "Tutorial/Proyectos",
+    "Aplicación/Landing",
+    "Aplicación/Mueble",
+    "Aplicación",
+    "Tutorial",
+    "Princiapl"
+  ]
+}
