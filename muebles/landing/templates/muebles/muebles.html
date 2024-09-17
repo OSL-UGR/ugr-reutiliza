@@ -94,9 +94,9 @@
 	<div class="book-area">
 		{% if restantes > 0 and user != ofertante%}
 			<form action="book" class="book-info" method="post">
+				<input type="number" name="cantRes" class="book-ammount" min=1 max={{restantes}} value=1>
 				{% csrf_token %}
 				<input class="button book" type="submit" value="Reservar">
-				<input type="number" name="cantRes" class="book-ammount" min=1 max={{restantes}} value=1>
 			</form>
 		{% endif %}
 		{% if user != ofertante %}
