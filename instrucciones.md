@@ -134,6 +134,58 @@ es localhost (127.0.0.1).
 de postgres por defecto es el 5432, (En nuestro caso hemos mapeado el 5432 del 
 contenedor directamente al 5432 del localhost, por lo tanto coinciden).
 
+### Credenciales:
+Por seguridad las credenciales para el envío de avisos por correo electrónico están
+guardadas en un archivo que ha de ser añadido posteriormente, este archivo también está en
+el gitignore para que sea imposible subirlo sin querer.
+
+El archivo, cuyo título debe ser credentials.txt debe estar dentro de la carpeta muebles de este
+mismo directorio, a la misma altura que manage.py, en la raíz del proyecto de Django y
+debe tener el formato:
+
+```bash
+{Correo de salida}
+{Contraseña}
+{Correo de destino}
+```
+
+Correo de salida será el que envíe los mensajes a los usuarios, por ello necesitamos la
+contraseña, y correo de destino será donde se guarden copias de los movimientos hechos por
+los usuarios, quién ha solicitado qué...
+
+## Lanzamiento:
+Finalmente para poder ejecutar la aplicación debemos entrar en el directorio muebles, y
+desde ahí crearemos las migraciones en la base de datos, después crearemos una cuenta de
+superusuario, para poder controlarlo todo desde la web y lanzaremos la propia aplicación.
+
+### Migraciones:
+Para crear las migraciones que posteriormente ejecutaremos sobre la base de datos se usa
+el comando makemigrations del módulo manage, y para migrarlos se usa el módulo migrate, de
+la siguiente manera:
+
+```python
+  python manage.py makemigrations
+  python manage.py migrate
+```
+
+### Creación de un superusuario:
+La creación de un superusuario es bastante sencilla, lo único que debemos hacer es
+rellenar los huecos con nuestros datos:
+```Python
+python manage.py createsuperuser --email example@example.com --puesto Loren
+--telefono 111111111 --organizacion "Ipsum dolor sit" 
+--nombre Amet --apellidos "Consectetur Adipiscing"
+```
+
+### Lanzamiento de la web:
+
+```Python
+python manage.py runserver
+```
+El lanzamiento de la aplicación es el último paso de estas instrucciones, para más
+información se recomienda investigar la documentación de este mismo proyecto, incluida en
+la carpeta Docs en markdown con formato Obsidian.
+
 ## Fuentes:
 [Entorno virtual](https://docs.python.org/3/library/venv.html)
 
