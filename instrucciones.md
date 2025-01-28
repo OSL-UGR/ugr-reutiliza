@@ -36,6 +36,7 @@ En nuestro entorno deberemos instalar las librerías:
 - python-dev
 - postgresql
 - postgresql-dev
+- libpq-dev
 
 # Configuración de la base de datos
 Para la configuración de desarrollo se ha usado un contenedor de docker
