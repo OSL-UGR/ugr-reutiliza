@@ -150,9 +150,8 @@ debe tener el formato:
 {Correo de destino}
 ```
 
-Correo de salida será el que envíe los mensajes a los usuarios, por ello necesitamos la
-contraseña, y correo de destino será donde se guarden copias de los movimientos hechos por
-los usuarios, quién ha solicitado qué...
+*Correo de salida* será el que envíe los mensajes a los usuarios, por ello necesitamos la
+contraseña, y *correo de destino* será una dirección de correo donde se enviará otro correo con cada movimiento para tener un registro en esa cuenta.
 
 ## Lanzamiento:
 Finalmente para poder ejecutar la aplicación debemos entrar en el directorio muebles, y
