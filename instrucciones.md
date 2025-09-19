@@ -150,6 +150,8 @@ debe tener el formato:
 {Correo de destino}
 ```
 
+Hay una template que puedes modificar y renombrar llamada credentials.example.txt
+
 *Correo de salida* será el que envíe los mensajes a los usuarios, por ello necesitamos la
 contraseña, y *correo de destino* será una dirección de correo donde se enviará otro correo con cada movimiento para tener un registro en esa cuenta.
 
@@ -159,6 +161,8 @@ desde ahí crearemos las migraciones en la base de datos, después crearemos una
 superusuario, para poder controlarlo todo desde la web y lanzaremos la propia aplicación.
 
 ### Migraciones:
+Si no existe el directorio muebles/landing/migrations crealo y dentro de el los archivos \_\_init\_\_.py y el directorio \_\_pycache\_\_ vacios.
+
 Para crear las migraciones que posteriormente ejecutaremos sobre la base de datos se usa
 el comando makemigrations del módulo manage, y para migrarlos se usa el módulo migrate, de
 la siguiente manera:
@@ -185,6 +189,8 @@ python manage.py runserver
 El lanzamiento de la aplicación es el último paso de estas instrucciones, para más
 información se recomienda investigar la documentación de este mismo proyecto, incluida en
 la carpeta Docs en markdown con formato Obsidian.
+
+Para acceder a la aplicación abre http://localhost:8000/muebles/
 
 ## Fuentes:
 [Entorno virtual](https://docs.python.org/3/library/venv.html)
