@@ -20,7 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!ps7i_pycpqk)@2flqesc7=6xby0r1#vi+*uv%d_jt+v4*nshy'
+with open(BASE_DIR / "secret_key.txt") as f:
+    SECRET_KEY = f.read().strip()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 # Application definition
@@ -70,8 +71,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'muebles.wsgi.application'
 
-ALLOWED_HOSTS = ['127.0.0.1', '172.*.*.*', 'landing.parallex.es', '192.168.1.51', 'localhost']
-CSRF_TRUSTED_ORIGINS = ['https://landing.parallex.es']
+ALLOWED_HOSTS = ['ceprudwdat06.ugr.es', 'www.ceprudwdat06.ugr.es', '127.0.0.1', 'localhost', '0.0.0.0', '150.214.22.199']
+
+# Production security defaults (will be relaxed below when DEBUG is True)
+if not DEBUG:
+    CSRF_TRUSTED_ORIGINS = ['https://ceprudwdat06.ugr.es']
+    CSRF_COOKIE_SECURE = True
+    CSRF_USE_SESSIONS = True
+    
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+# If behind a reverse proxy/SSL terminator (e.g., Apache/Nginx), this lets Django
+# know the original request used HTTPS so it doesn't mis-detect insecure requests.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -87,9 +103,9 @@ CSRF_TRUSTED_ORIGINS = ['https://landing.parallex.es']
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'mueblesitos',
-            'USER': 'postgres',
-            'PASSWORD': 'password',
+            'NAME': 'muebles',
+            'USER': 'muebles',
+            'PASSWORD': 'muebles2025',
             'HOST': '127.0.0.1',
             'PORT': '5432',
             }
@@ -135,10 +151,10 @@ GRAPH_MODELS = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = "muebles/media/"
+MEDIA_URL = "/media/"
 
-STATIC_URL = 'muebles/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'landing/static')
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

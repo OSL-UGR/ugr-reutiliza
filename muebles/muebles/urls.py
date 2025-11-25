@@ -19,7 +19,7 @@ from django.urls import include, path, re_path
 from django.contrib.sitemaps.views import sitemap
 from landing.sitemaps import LandingSitemap
 
-URL = 'muebles/'
+URL = ''
 
 sitemaps = {
         'landing': LandingSitemap,

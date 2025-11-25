@@ -164,3 +164,6 @@ cython_debug/
 Todo
 requirements.in
 credentials.txt
+secret_key.txt
+static/
+media/

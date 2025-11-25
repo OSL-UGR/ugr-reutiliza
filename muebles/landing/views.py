@@ -10,7 +10,7 @@ import smtplib
 from email.mime.text import MIMEText
 
 
-URL = 'muebles/'
+URL = ''
 backend = SettingsBackend()
 
 port = 587

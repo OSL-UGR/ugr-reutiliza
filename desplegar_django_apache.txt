@@ -1,0 +1,90 @@
+# Cambios Proyecto
+
+En settings.py cambiar la secret key (y preferiblemente leerla de archivo o env) y desactivar debug
+
+```
+# SECURITY WARNING: keep the secret key used in production secret!
+with open(BASE_DIR / "secret_key.txt") as f:
+    SECRET_KEY = f.read().strip()
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
+```
+
+Añadir tambien esto con tu dominio modificado
+
+```
+# Production security defaults (will be relaxed below when DEBUG is True)
+if not DEBUG:
+    CSRF_TRUSTED_ORIGINS = ['https://dominio.ugr.es']
+    CSRF_COOKIE_SECURE = True
+    CSRF_USE_SESSIONS = True
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000  # Si vas a usar un valor grande asegurate de que
+                                    # tus certs estan en buen estado y van a segir asi
+                                    # Para hacer tests usad uno bajo
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+# If behind a reverse proxy/SSL terminator (e.g., Apache/Nginx), this lets Django
+# know the original request used HTTPS so it doesn't mis-detect insecure requests.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+```
+
+
+# Para apache:
+
+Instalar addon de wsgi y activarlo. Una vez instalado entrar en /etc/apache2/mods-available/wsgi.conf y añadir lo siguiente adaptado a tu proyecto
+
+```
+# Archivo wsgi creado automaticamente por django, modificar la direccion
+# inicial '/' si quieres que este ne algun sitio especificao ej:'/miweb'
+WSGIScriptAlias / /opt/ugr-reutiliza/muebles/muebles/wsgi.py
+
+# Directorio del entorno virtual creado
+WSGIPythonHome /opt/ugr-reutiliza/.venv
+
+# Carpeta donde encontrar todo el codigo de python
+WSGIPythonPath /opt/ugr-reutiliza/muebles
+
+# Damos permiso a ver el archivo wsgi indicado en WSGIScriptAlias
+<Directory /opt/ugr-reutiliza/muebles/muebles>
+<Files wsgi.py>
+    Require all granted
+</Files>
+</Directory>
+```
+
+Si hay varios sitios django tirando a traves del addon de mod_wsgi hay que cambiar en wsgi.py
+
+```
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "{{ project_name }}.settings")
+```
+
+a
+
+```
+os.environ["DJANGO_SETTINGS_MODULE"] = "{{ project_name }}.settings"
+```
+
+Para poder servir statics y media hay que configurar STATIC_URL, STATIC_ROOT, MEDIA_URL y MEDIA_ROOT en settings.py,
+tener todas las carpetas no standard con elementos static en STATICFILES_DIRS y ejecutar manage.py collectstatic
+y configurar o bien otro webserver para servirlos (nginx por ejemplo) o añadir esto a la config
+
+```
+Alias /media/ /opt/ugr-reutiliza/muebles/media/
+Alias /static/ /opt/ugr-reutiliza/muebles/static/
+
+<Directory /opt/ugr-reutiliza/muebles/static>
+Require all granted
+</Directory>
+
+<Directory /opt/ugr-reutiliza/muebles/media>
+Require all granted
+</Directory>
+```
+
+Es posible que apache no tenga permisos en la carpeta por lo que habria que arreglarlo. Ya que esta un server no final
+simplemente añadi apache al grupo developers.
+
+## Por ultimo instalar certificados SSL
