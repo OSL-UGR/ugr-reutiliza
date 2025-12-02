@@ -11,8 +11,12 @@ import os
 categorias = (
         ('Silla', 'Silla'),
         ('Mesa', 'Mesa'),
-        ('Armario', 'Armario'),
+        ('Armario-Vitrina', 'Armario-Vitrina'),
         ('Pizarra', 'Pizarra'),
+        ('Cajonera', 'Cajonera'),
+        ('Perchero', 'Perchero'),
+        ('Papelera', 'Papelera'),
+        ('Otro', 'Otro'),
         )
 
 
