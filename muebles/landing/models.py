@@ -7,7 +7,8 @@ from django.db.models.signals import pre_delete, pre_save
 from django.dispatch import receiver
 import os
 
-
+# El primer valor es lo que se guarda en la base de datos y el segundo es lo que lee 
+# Esta tupla se utiliza para generar en html un <select> de forma automatica con django
 categorias = (
         ('Silla', 'Silla'),
         ('Mesa', 'Mesa'),
@@ -19,7 +20,8 @@ categorias = (
         ('Otro', 'Otro'),
         )
 
-
+# Crea una clase usuario en la base de datos, especificando los parámetros de este con sus restricciones 
+# La primary key es el email
 class Usuario(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), max_length=100,
                               primary_key=True)
@@ -34,12 +36,14 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     telefono = models.CharField(max_length=9)
     organizacion = models.CharField(max_length=200)
 
+    # A la hora de un login, el valor del campo "username" es el parámetro que nosotros hemos definido como 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["nombre", "apellidos", "puesto", "telefono",
                        "organizacion"]
 
     objects = CustomUserManager()
 
+    # TODO: correo electrónico hardcoreado
     @classmethod
     def get_default_pk(cls):
         user = cls.objects.get(email="alux6mc@gmail.com")

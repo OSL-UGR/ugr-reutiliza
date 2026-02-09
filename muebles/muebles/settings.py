@@ -100,12 +100,14 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # que haya en el campo 'NAME'.
 
 # Se haría con "CREATE DATABASE mueblesitos;" en este caso
+# TODO: ahora mismo estan los parámetros de user y de password base para utilizar la pruebas, a la hora de lanzarlo hay que modificarlo:
+# Un por defecto que estaba antes era: 'NAME': 'muebles','USER': 'muebles' y 'PASSWORD': 'muebles2025'
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'muebles',
-            'USER': 'muebles',
-            'PASSWORD': 'muebles2025',
+            'NAME': 'mueblesitos',
+            'USER': 'postgres',
+            'PASSWORD': 'password',
             'HOST': '127.0.0.1',
             'PORT': '5432',
             }
