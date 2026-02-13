@@ -11,7 +11,7 @@ Esto nos creará una carpeta llamada env que contiene todos los datos del entorn
 
 Posteriormente podemos acceder a este entorno con:
 
-```
+
     source env/bin/activate
 ```
 
@@ -89,6 +89,8 @@ donde aparezca mueblesitos, en caso de usar un nombre diferente, tendría que
 ser modificado.
 
 ```CREATE DATABASE {nombreDeLaBD};```
+
+Una vez creada para salir de Postgres y del contenedor, escribe \q y pulsa Enter. Luego escri
 
 
 ## Configuración de Django

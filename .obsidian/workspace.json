@@ -1,0 +1,235 @@
+{
+  "main": {
+    "id": "fa0aa73d9a783d1b",
+    "type": "split",
+    "children": [
+      {
+        "id": "9da80de0ac35e488",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c074542ad1370fd3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "especificaciones.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "especificaciones"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "4b3cf134f42bf0f3",
+    "type": "split",
+    "children": [
+      {
+        "id": "0dd794e8ea2f3900",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a4b0a694d27fee07",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de archivos"
+            }
+          },
+          {
+            "id": "79576fcebbd3c270",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Buscar"
+            }
+          },
+          {
+            "id": "0ad12a232137c246",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 208.5
+  },
+  "right": {
+    "id": "2d36c0395c49377c",
+    "type": "split",
+    "children": [
+      {
+        "id": "91a98029bc38c227",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8a6a745511df080e",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Docs/Tutorial/HTML.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Enlaces entrantes de HTML"
+            }
+          },
+          {
+            "id": "fa0d6875f21609bd",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Docs/Tutorial/HTML.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Enlaces salientes de HTML"
+            }
+          },
+          {
+            "id": "c8981ac32682272f",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "0eb1862a9144ee02",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas las propiedades"
+            }
+          },
+          {
+            "id": "88ff0560869abbd0",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Docs/Tutorial/HTML.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Esquema de HTML"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir selector rápido": false,
+      "graph:Abrir vista gráfica": false,
+      "canvas:Crear nuevo lienzo": false,
+      "daily-notes:Abrir la nota de hoy": false,
+      "templates:Insertar plantilla": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Crear nueva base": false
+    }
+  },
+  "active": "c074542ad1370fd3",
+  "lastOpenFiles": [
+    "instrucciones.md",
+    "especificaciones.md",
+    "Docs/Aplicación/Mueble/settings.py.md",
+    "Docs/Aplicación/Landing/models.py.md",
+    "Docs/Aplicación/Mueble/url.py.md",
+    "Docs/Aplicación/Mueble/Muebles.md",
+    "Docs/Aplicación/Landing/admin.py.md",
+    "Docs/Aplicación/Landing/Templates/perfil.html.md",
+    "Docs/Aplicación/Landing/Templates/muebles.html.md",
+    "Docs/Aplicación/Landing/Templates/login.html.md",
+    "Docs/Aplicación/Landing/Templates/index.html.md",
+    "Docs/Aplicación/Landing/Templates/addMueble.html.md",
+    "Docs/MueblesUGR.md",
+    "Docs/Tutorial/HTML.md",
+    "Aplicación/Mueble/url.py.md",
+    "Aplicación/Mueble",
+    "Aplicación",
+    "Docs/Tutorial/Aplicaciones/Forms.md",
+    "Docs/Tutorial/Aplicaciones/Aplicaciones.md",
+    "muebles/media/images/64d020b336905_VPUTrnK.png",
+    "muebles/media/images/64d020b336905_UiSMTNp.png",
+    "muebles/media/images/64d020b336905_SFN50D2.png",
+    "muebles/media/images/64d020b336905_5QO7tox.png",
+    "muebles/media/images/64d020b336905.webp",
+    "muebles/media/images/64d020b336905.png",
+    "muebles/media/images/silla_AP2LkiM.png",
+    "muebles/media/images/silla_4i1wNfk.png",
+    "muebles/media/images/silla.png",
+    "muebles/media/images",
+    "muebles/media",
+    "muebles/muebles/__pycache__/wsgi.cpython-312.pyc",
+    "muebles/landing/migrations/__pycache__/0001_initial.cpython-312.pyc",
+    "muebles/landing/migrations/0001_initial.py",
+    "muebles/landing/migrations/__pycache__/__init__.cpython-312.pyc",
+    "muebles/landing/__pycache__/backends.cpython-312.pyc",
+    "muebles/landing/__pycache__/views.cpython-312.pyc",
+    "env/lib/python3.12/site-packages/nbconvert/templates/skeleton/README.md",
+    "env/lib/python3.12/site-packages/nbconvert/templates/README.md",
+    "env/lib/python3.12/site-packages/IPython/core/tests/2x2.png",
+    "env/lib/python3.12/site-packages/idna-3.10.dist-info/LICENSE.md",
+    "env/lib/python3.12/site-packages/pyzmq-27.1.0.dist-info/licenses/LICENSE.md",
+    "env/lib/python3.12/site-packages/zmq/backend/cffi/README.md",
+    "env/lib/python3.12/site-packages/soupsieve-2.8.dist-info/licenses/LICENSE.md",
+    "env/lib/python3.12/site-packages/django/contrib/admin/static/admin/js/vendor/select2/LICENSE.md",
+    "env/lib/python3.12/site-packages/django/contrib/admin/static/admin/css/vendor/select2/LICENSE-SELECT2.md",
+    "env/lib/python3.12/site-packages/django/contrib/admin/static/admin/img/README.md"
+  ]
+}

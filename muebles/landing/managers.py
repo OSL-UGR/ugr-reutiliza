@@ -2,6 +2,15 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
 
+# Como hemos definido el mail como primary_key para el usuario, estos dos métodos sobreescriben la instrucciones por defecto de Django
+# para enseñarle a crear usuario  superusuarios.
+
+
+# TODO Panel de administrador personalizado:
+# Cuando implementemos la vista para CREAR un nuevo usuario desde el panel, NO debemos usar 'Usuario.objects.create()'. 
+# Debemos usar obligatoriamente 'Usuario.objects.create_user(email=..., password=..., **datos)' 
+# para asegurarnos de que la contraseña se encripta correctamente usando este Manager.
+
 class CustomUserManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers

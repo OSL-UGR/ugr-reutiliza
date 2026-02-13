@@ -22,9 +22,13 @@ categorias = (
 
 # Crea una clase usuario en la base de datos, especificando los parámetros de este con sus restricciones 
 # La primary key es el email
+
+# TODO Panel de administrador personalizado:
+# Al eliminar un Usuario desde el nuevo panel, se borrarán en cascada todos los Muebles que haya ofertado (on_delete=CASCADE en Mueble). 
+# Se mostrará en el panel mostramos un aviso de "Se borrarán X muebles" antes de confirmar.
 class Usuario(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), max_length=100,
-                              primary_key=True)
+                              primary_key=True) 
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -52,7 +56,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-
+#TODO: modificar algunas restricciones de parámetros, puede que se quede corto 
+# Todos los muebles están asociados a un un ofertante (usuario), si este se borrase tambíen se borraría el mueble
 class Mueble(models.Model):
     nombre = models.CharField(max_length=20, default="")
     dimensiones = models.CharField(max_length=200, default="")
@@ -70,7 +75,7 @@ class Mueble(models.Model):
     def get_absolute_url(self):
         return f'/{self.id}/post'
 
-
+# Permite que un mueble tenga fotos adicionales. Cada foto está vinculada a un mueble, obviamente si el mueble se borra sus fotos tb
 class Foto(models.Model):
     mueble = models.ForeignKey(Mueble, on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to='images/')
@@ -78,7 +83,10 @@ class Foto(models.Model):
     def get_absolute_url(self):
         return f'{self.imagen.url}'
 
-
+ # TODO: revisar por que si borramos un usuario que ha echo una reserva, la reserva no se borra si no que se mantiene. 
+ # Esto creará un error, ya que con DO_NOTHING, al borrarlo no almacenará un valor null en ese parámetro. Esto quiere decir que
+ # si accedemos a esa reserva EN TODOS LOS CASOSA se lanzará un error del tipo IntegrityError por la base de datos
+ # Una reserva está asociado tanto a un demandante como a su mueble
 class Reserva(models.Model):
     mueble = models.ForeignKey(Mueble, on_delete=models.CASCADE)
     cantidad = models.IntegerField(default=1)

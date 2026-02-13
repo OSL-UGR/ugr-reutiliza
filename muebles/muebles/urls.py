@@ -19,15 +19,22 @@ from django.urls import include, path, re_path
 from django.contrib.sitemaps.views import sitemap
 from landing.sitemaps import LandingSitemap
 
-URL = ''
+URL = ''  #Para cargar la ulr raiz
 
 sitemaps = {
         'landing': LandingSitemap,
         }
 
 urlpatterns = [
+        # Delegamos la navegación a landing
         path(f'{URL}', include('landing.urls'), name='landing'),
+
+        # Carga el panel de administración por defecto de django en /admin/
         path(f'{URL}admin/', admin.site.urls, name='admin'),
+
+        # Genera dinámicamente el archivo sitemap.xml
         path(f'{URL}sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+
+        #ara visitar las métricas de monitorización de Prometheus
         path('', include('django_prometheus.urls'))
         ]
