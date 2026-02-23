@@ -1,0 +1,64 @@
+{% extends 'index.html' %}
+
+{% block pages %}
+    <li class="first" onclick='location.href="/{{URL}}";'>Catálogo</li>
+    <li onclick='location.href="/{{URL}}perfil";'>Perfil</li>
+{% endblock %}
+
+{% block content %}
+<main class="gestion-usuarios-main">
+    <div class="nom">
+        <h1>Gestión de Usuarios</h1>
+    </div>
+    
+    <div class="actions-usuarios">
+        <button class="button btn-add-user" onclick='location.href="/{{URL}}usuarios/add";'>
+            + Añadir Nuevo Usuario
+        </button>
+    </div>
+
+    <div class="table-container">
+        <table class="users-table">
+            <thead>
+                <tr class="thead-row">
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Organización</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in lista_usuarios %}
+                <tr class="tbody-row">
+                    <td>{{ usuario.nombre }} {{ usuario.apellidos }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.organizacion }}</td>
+                    <td>
+                        {% if usuario.is_superuser %}
+                            <span class="role-superadmin">Super Admin</span>
+                        {% elif usuario.is_staff %}
+                            <span class="role-staff">Staff</span>
+                        {% else %}
+                            Usuario
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if usuario != user %}
+                            <form action="{% url 'delete_usuario' usuario.email %}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar a este usuario? Se borrarán sus reservas y muebles.');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-delete">
+                                    Eliminar
+                                </button>
+                            </form>
+                        {% else %}
+                            <span class="text-muted">(Tú)</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock %}

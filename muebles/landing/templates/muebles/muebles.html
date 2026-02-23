@@ -5,6 +5,9 @@
 {% if mueble %}
 <li class="first" onclick='location.href="/{{URL}}";'>Catálogo</a></li>
 {% endif %}
+{% if user.is_superuser %}
+	<li onclick='location.href="/{{URL}}usuarios";'>Gestión Usuarios</li>
+{% endif %}
 {% if user.is_staff or user.is_superuser %}
 <li onclick='location.href="/{{URL}}add";'>Añadir mueble</a></li>
 {% endif %}

@@ -47,9 +47,8 @@ urlpatterns = [
         path("<int:mueble_id>/", views.deleteMueble, name="delete"),
 
         # TODO Panel de administrador personalizado:
-        # Añadir aquí las futuras rutas para gestionar usuarios. 
-        # Ejemplo: path("admin-usuarios/", views.lista_usuarios, name="lista_usuarios"),
-        # path("admin-usuarios/add", views.add_usuario, name="add_usuario"), etc.
+        path("usuarios", views.gestion_usuarios, name="gestion_usuarios"),
+        path("usuarios/delete/<str:email>", views.delete_usuario, name="delete_usuario"),
 
 
         re_path(r'^media/(?P<path>.*)$', serve, {'document_root':

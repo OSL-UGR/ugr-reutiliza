@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.conf import settings
 from .backends import SettingsBackend
 from .models import Mueble, Foto, Usuario, Reserva, categorias as cat
@@ -251,6 +251,7 @@ def bookMueble(request, mueble_id):
         reserva.save()
 
         return redirect(f"/{URL}{mueble_id}/post")
+    
     #No gestionamos la reserva, no hay stock suficiente y redirigimos a index
     #TODO: mostrar mensaje de advertencia de que no se ha podido gestionar la reserva por falta de stock
     else:
@@ -369,30 +370,38 @@ def perfil(request):
             }
     return render(request, "muebles/perfil.html", context)
 
-
+# Prepara todos los atributos de información sobre un mueble para mostrarlos, dado el id de un mueble
 @login_required
 def post(request, mueble_id):
+
+    # Obtenemos el mueble, quien es el ofertante y cuantas reservas tiene
     mueble = Mueble.objects.get(pk=mueble_id)
     ofertante = mueble.ofertante
     reservas = Reserva.objects.filter(mueble=mueble)
 
+    # Calculamos la disponibilidad de el mueble
     total = 0
     demandantes = []
     for reserva in reservas:
-        demandantes.append(reserva.demandante)
+        demandantes.append(reserva.demandante) # Para ver quienes han demandado el mueble
         total += reserva.cantidad
 
+    # Vemos si el usuario logueado, tiene ya una reserva o no. Para definir una acción en el html.
     try:
         reserva = Reserva.objects.get(mueble=mueble, demandante=request.user)
     except:
         reserva = None
 
+
+    # Crea la lista de imágenes definiendo la primera como la portada
     imagenes = [mueble.main_image]
     fotos = Foto.objects.filter(mueble=mueble)
     usuario = Usuario.objects.get(email=request.user)
 
     for foto in fotos:
         imagenes.append(foto.imagen)
+
+    # Pasamos los atributos al html
     context = {
             'restantes': mueble.cantidad - total,
             'mueble': mueble,
@@ -405,3 +414,30 @@ def post(request, mueble_id):
             "URL": URL
             }
     return render(request, "muebles/muebles.html", context)
+
+
+# Función que comprueba si el usuario es un super usuario
+def es_superusuario(user):
+    return user.is_superuser
+
+@login_required
+@user_passes_test(es_superusuario, login_url='index') # Si no es superuser, lo manda al index
+def gestion_usuarios(request):
+
+    # Obtenemos la lista de los usuarios
+    lista_usuarios = Usuario.objects.all().order_by('email')
+    
+    context = {
+        "lista_usuarios": lista_usuarios,
+        "URL": URL
+    }
+    
+    return render(request, "muebles/gestion_usuarios.html", context)
+
+
+#TODO: queda por implementar
+@login_required
+@user_passes_test(es_superusuario, login_url='index')
+def delete_usuario(request, email):
+
+    return redirect("gestion_usuarios")

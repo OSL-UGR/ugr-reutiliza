@@ -644,3 +644,83 @@ t4 {
 	box-shadow: 2px 3px 0px 1px rgba(0, 0, 0, 0.4);
 }
 
+/***********************************************************/
+/********************GESTIÓN DE USUARIOS********************/
+/***********************************************************/
+
+.gestion-usuarios-main {
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto;
+    gap: 15px; /* Espacio entre el título, el botón y la tabla */
+}
+
+
+/* Botón de añadir usuario (hereda de .button pero ajusta el tamaño) */
+.btn-add-user {
+    background-color: rgba(64, 0, 128, 0.5);
+    color: black;
+    padding: 10px 20px;
+    font-size: 16px; 
+}
+
+.table-container {
+    display: block;
+    overflow-x: auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos de la tabla */
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.users-table th, .users-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.thead-row {
+    background-color: #f2f2f2;
+}
+
+.users-table th {
+    border-bottom: 2px solid #ddd;
+}
+
+/* Etiquetas de roles */
+.role-superadmin {
+    color: red;
+    font-weight: bold;
+}
+
+.role-staff {
+    color: blue;
+}
+
+.text-muted {
+    color: grey;
+}
+
+/* Botón de eliminar tabla */
+.btn-delete {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: filter 0.3s;
+}
+
+.btn-delete:hover {
+    filter: brightness(85%);
+}
+
+/******************************************************************/
+/********************FIN DE GESTIÓN DE USUARIOS********************/
+/******************************************************************/

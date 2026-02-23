@@ -17,6 +17,11 @@
 		<ul class="navigation">
 			{% block pages %}
 			<li onclick='location.href="/{{URL}}";'>Home</a></li>
+
+			{% if user.is_superuser %}
+        		<li onclick='location.href="/{{URL}}usuarios";'>Gestión Usuarios</li>
+    		{% endif %}
+			
 			<li onclick='location.href="/{{URL}}add";'>Añadir mueble</a></li>
 			<li onclick='location.href="/{{URL}}perfil";'>Perfil</a></li>
 			{% endblock %}
