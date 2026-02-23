@@ -9,6 +9,7 @@ import os
 
 # El primer valor es lo que se guarda en la base de datos y el segundo es lo que lee 
 # Esta tupla se utiliza para generar en html un <select> de forma automatica con django
+
 categorias = (
         ('Silla', 'Silla'),
         ('Mesa', 'Mesa'),
@@ -17,12 +18,20 @@ categorias = (
         ('Cajonera', 'Cajonera'),
         ('Perchero', 'Perchero'),
         ('Papelera', 'Papelera'),
+        ('Estantería', 'Estantería'),
         ('Otro', 'Otro'),
         )
 
-# Crea una clase usuario en la base de datos, especificando los parámetros de este con sus restricciones 
-# La primary key es el email
+# Almacenará todos los DNIS permitidos por la aplicación. E
+class DniAutorizado(models.Model):
+    #Tendra 9 caracteres, debe ser único es es la primary_key de la tabla
+    dni = models.CharField(max_length=9, unique=True, primary_key=True)
 
+    def __str__(self):
+
+        return self.dni
+
+# La primary key es el email
 # TODO Panel de administrador personalizado:
 # Al eliminar un Usuario desde el nuevo panel, se borrarán en cascada todos los Muebles que haya ofertado (on_delete=CASCADE en Mueble). 
 # Se mostrará en el panel mostramos un aviso de "Se borrarán X muebles" antes de confirmar.
@@ -34,6 +43,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
 
+    # Gracias a blank hacemos que el campo es opcional a nivel de validación
+    dni = models.CharField(max_length=9, unique=True, null=True, blank=True)
+
     nombre = models.CharField(max_length=50)
     apellidos = models.CharField(max_length=100)
     puesto = models.CharField(max_length=100)
@@ -43,7 +55,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     # A la hora de un login, el valor del campo "username" es el parámetro que nosotros hemos definido como 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["nombre", "apellidos", "puesto", "telefono",
-                       "organizacion"]
+                       "organizacion", "dni"]
 
     objects = CustomUserManager()
 
@@ -56,10 +68,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-#TODO: modificar algunas restricciones de parámetros, puede que se quede corto 
 # Todos los muebles están asociados a un un ofertante (usuario), si este se borrase tambíen se borraría el mueble
 class Mueble(models.Model):
-    nombre = models.CharField(max_length=20, default="")
+    nombre = models.CharField(max_length=100, default="")
     dimensiones = models.CharField(max_length=200, default="")
     descripcion = models.CharField(max_length=4000)
     main_image = models.ImageField(upload_to='images/')
@@ -91,7 +102,7 @@ class Reserva(models.Model):
     mueble = models.ForeignKey(Mueble, on_delete=models.CASCADE)
     cantidad = models.IntegerField(default=1)
     demandante = models.ForeignKey(Usuario,
-                                   on_delete=models.DO_NOTHING,
+                                   on_delete=models.CASCADE,
                                    null=True)
 
 
