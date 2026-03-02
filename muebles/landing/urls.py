@@ -8,11 +8,15 @@ from . import views
 
 urlpatterns = [
     
-        # Pantalla de inicio de la app, el tablón de anuncios
-        path("", views.index, name="index"),
+        # Pantalla de portada de la app, se muestra el nombre junto a los dos botonesde iniciar sesion o crear cuenta
+        path("", views.portada, name="portada"),
 
-        # Pantalla de inicio de sesión
+        # Pantalla de inicio de la app, el tablón de anuncios
+        path("catalogo", views.index, name="index"),
+
+        # Pantalla de inicio de sesión y de crear cuenta
         path("login", views.loginPage, name="login"),
+        path("registro", views.registroPage, name="registro"),
 
         # Acción para cerrar sesión
         path("logout", views.logoutPage, name="logout"),

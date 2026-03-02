@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+
+{% block pages %}
+{% endblock %}
+
+{% block content %}
+
+    {% if error %}
+        <div>
+                <h2 style="color: red;">¡Atención!</h2>
+                <p>{{ error }}</p>
+        </div>
+    {% endif %}
+
+    <h1 class ="portada-title" >Registro:  </h1>
+
+    <form action="registro" method="post" text-align="center" class="login">
+        {% csrf_token %}
+        
+        <label for="dni"><b>DNI:</b></label>
+        <input type="text" placeholder="Introduzca su DNI (Ej: 12345678A)" name="dni" required>
+
+        <label for="nombre"><b>Nombre:</b></label>
+        <input type="text" placeholder="Introduzca su nombre" name="nombre" required>
+
+        <label for="apellidos"><b>Apellidos:</b></label>
+        <input type="text" placeholder="Introduzca sus apellidos" name="apellidos" required>
+
+        <label for="email"><b>Email:</b></label>
+        <input type="email" placeholder="Introduzca su email" name="email" required>
+
+        <label for="psw"><b>Contraseña:</b></label>
+        <input type="password" placeholder="Introduzca su contraseña" name="psw" required>
+
+        <label for="puesto"><b>Puesto:</b></label>
+        <input type="text" placeholder="Ej: Profesor, Alumno..." name="puesto" required>
+
+        <label for="telefono"><b>Teléfono:</b></label>
+        <input type="text" placeholder="Introduzca su teléfono" name="telefono" required>
+
+        <label for="organizacion"><b>Organización:</b></label>
+        <input type="text" placeholder="Ej: ETSIIT, Facultad de Ciencias..." name="organizacion" required>
+
+        <button class="button" type="submit">Registrarse</button>
+
+    </form>
+{% endblock %}
+
+{% block logged %}
+    <li class="last" onclick='location.href="/{{URL}}login";'>Iniciar Sesión</li>
+{% endblock %}

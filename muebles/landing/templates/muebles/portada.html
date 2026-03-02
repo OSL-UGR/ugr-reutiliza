@@ -1,0 +1,26 @@
+{% extends 'index.html' %}
+
+{% block pages %}
+{% endblock %}
+
+{% block logged %}
+{% endblock %}
+
+{% block content %}
+<main class="portada-main">
+    
+    <h1 class="portada-title">UGR Recicla</h1>
+    <p class="portada-subtitle">Portal de reutilización de mobiliario de la Universidad de Granada</p>
+    
+    <div class="portada-buttons">
+        <button class="button btn-login-portada" onclick='location.href="/{{URL}}login";'>
+            Iniciar Sesión
+        </button>
+        
+        <button class="button btn-registro-portada" onclick='location.href="/{{URL}}registro";'>
+            Registrarse
+        </button>
+    </div>
+    
+</main>
+{% endblock %}

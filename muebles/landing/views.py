@@ -4,7 +4,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.conf import settings
 from .backends import SettingsBackend
-from .models import Mueble, Foto, Usuario, Reserva, categorias as cat
+from .models import Mueble, Foto, Usuario, Reserva, DniAutorizado, categorias as cat
 from threading import Thread
 import smtplib
 from email.mime.text import MIMEText
@@ -151,22 +151,30 @@ def loginPage(request):
 
         return redirect("index")    
 
-    # Si lanzamos un POST (iniciamos la comprobación de inicio de sesión)
+    # Si lanzamos un POST (iniciamos la comprobación de   de sesión)
     elif (request.method == "POST"):
         email = request.POST['email']
         psw = request.POST['psw']
-        user = backend.authenticate(email=email, password=psw)
 
+        # Comprobamos que el usuario ya se encuentre registrado enl la base de datos
+        if not Usuario.objects.filter(email=email).exists():
+            context['error'] = "No existe ninguna cuenta registrada con este correo electrónico, por favor registrese. Si piensa que es un error contacte con un administrador"
+            return render(request, "muebles/login.html", context)
+
+        user = backend.authenticate(email=email, password=psw)
+        # Si la combinación de correo y contraseña es correcta, iniciamos sesión
         if user is not None:
             login(request, user)
             return redirect("index")
+        
+        # Si no, envíamos un error
         else:
-            return redirect("login")
+            context['error'] = "La contraseña introducida es incorrecta. Por favor, inténtalo de nuevo."
+            return render(request, "muebles/login.html", context)
 
     # Lanzamos un GET (se muestra el html de login base)
     else:
         return render(request, "muebles/login.html", context)
-
 
 @login_required
 def unbookMueble(request, mueble_id):
@@ -340,8 +348,6 @@ def addMueble(request):
             return render(request, "muebles/addMueble.html", context)
     return redirect("index")
 
-
-# TODO: muy importante, ahora mismo no se puede eliminar un mueble que alguien ya ha reservado ya que PostgreS evitará lanzar un IntegrityError
 @login_required
 def deleteMueble(request, mueble_id):
     if (request.method == "POST"):
@@ -356,7 +362,7 @@ def deleteMueble(request, mueble_id):
 @login_required
 def logoutPage(request):
     logout(request)
-    return redirect("index")
+    return redirect("portada")
 
 # Pantalla de perfil (solo puedes ver tu perfil)
 @login_required
@@ -441,3 +447,82 @@ def gestion_usuarios(request):
 def delete_usuario(request, email):
 
     return redirect("gestion_usuarios")
+
+# Función que carga la portada (pantalla principal) de la app
+def portada(request):
+
+    #Si el usuario ya guarda la sesión, lo mandamos directamente al catálogo
+    if request.user.is_authenticated:
+
+        return redirect("index")
+
+    #Si no, le mostramos la portada
+
+    return render(request,"muebles/portada.html", {"URL": URL}) 
+
+# Función que maneja y redirecciona la pantalla de registro de la app
+def registroPage(request):
+    context = {"URL": URL}
+
+    # Si el usuario ya guarda la sesión, lo mandamos directamente al catálogo
+    if request.user.is_authenticated:
+
+        return redirect("index")
+
+    # Se solicita un registro en la base de datos
+    if request.method == "POST":
+        # Recogemos todos los datos (y limpiamos si es necesario)
+        dni = request.POST.get('dni','').strip().upper()
+        email = request.POST.get('email','').strip()
+        psw = request.POST.get('psw','')
+        nombre = request.POST.get('nombre','')
+        apellidos = request.POST.get('apellidos','')
+        puesto = request.POST.get('puesto','')
+        telefono = request.POST.get('telefono','')
+        organización = request.POST.get('organizacion','')
+
+        # Comprobamos que el dni esté en la lista de dnis aptos
+        if not DniAutorizado.objects.filter(dni=dni).exists():
+            context['error'] = "Dados tu datos, no tienes acceso a la aplicación. Si piensas que es un error contacta con un administrador."
+            return render(request, "muebles/registro.html", context)
+        
+        # Comprobamos que ese usuario con ese dni no se encuentre ya registrado
+        if Usuario.objects.filter(dni=dni).exists():
+            context['error'] = "El usuario con los datos dados ya se encuentra registrado. Por favor inicie sesión"
+            return render(request,'muebles/registro.html',context)
+        
+        # Comprobamos que ese usuario intente registrarse con un email ya registrado
+        if Usuario.objects.filter(email=email).exists():
+            context['error'] = "Ese correo electrónico ya está en uso, por favor ingrese otro"
+            return render(request,"muebles/registro.html",context)
+        
+        # Si ha superado todas las comprobaciones, creamos el usuario
+        try:
+            new_user = Usuario(
+                email = email,
+                dni = dni,
+                nombre = nombre,
+                apellidos = apellidos,
+                puesto = puesto,
+                telefono = telefono,
+                organización=organización
+            )
+
+            new_user.set_password(psw)    #Para que la contraseña se encripte a la hora de la inserción
+            new_user.save()
+
+            # Autologeamos en la app si se ha realizado el registro de manera correcta
+            user = backend.authenticate(email=email, password=psw)
+            if user is not None:
+                login(request, user)
+                
+            return redirect("index")
+
+        except Exception as e:
+            context['error'] = f"Error al crear el usuario: {e}"
+            return render(request, "muebles/registro.html", context)
+    # Si es un get simplemente mostramos el formulario de registro
+    else:
+
+        return render(request, "muebles/registro.html", context)
+

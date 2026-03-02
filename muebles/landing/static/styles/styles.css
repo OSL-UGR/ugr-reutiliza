@@ -516,7 +516,7 @@ t4 {
 /********************LOG IN*********************************/
 /***********************************************************/
 .login {
-	width: 20em;
+	width: 30em;
 	justify-self:center;
 	background-color: #fff;
 	padding: 2%;
@@ -723,4 +723,56 @@ t4 {
 
 /******************************************************************/
 /********************FIN DE GESTIÓN DE USUARIOS********************/
+/******************************************************************/
+
+/***********************************************************/
+/******************** PORTADA INICIAL **********************/
+/***********************************************************/
+
+.portada-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    text-align: center;
+}
+
+.portada-title {
+    font-size: 4rem;
+    color: #00308F; 
+    margin-bottom: 10px;
+}
+
+.portada-subtitle {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 40px;
+}
+
+.portada-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.btn-login-portada {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.btn-registro-portada {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    background-color: #28a745;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-registro-portada:hover {
+    background-color: #218838;
+}
+
+/**************************************************************/
+/********************FIN DE PORTADA INICIAL********************/
 /******************************************************************/
