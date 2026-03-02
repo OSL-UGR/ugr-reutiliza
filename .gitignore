@@ -165,5 +165,6 @@ Todo
 requirements.in
 credentials.txt
 secret_key.txt
+dnis.txt
 static/
 media/
