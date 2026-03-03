@@ -164,6 +164,7 @@ cython_debug/
 Todo
 requirements.in
 credentials.txt
+dnis.txt
 secret_key.txt
 dnis.txt
 static/
