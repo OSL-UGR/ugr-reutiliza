@@ -21,6 +21,7 @@ file = open(str(settings.BASE_DIR) + "/credentials.txt", "r")
 # Estos 3 parámetros son los que hemos rellenado dentro de credentials.txt
 email = file.readline().strip('\n')
 password = file.readline().strip('\n')
+
 # Prepara el mensaje del correo para el administrador/inventario
 def mensajeInventarioReserva(nombreMueble, cantidad, demandante, puesto, organizacion, correo, correoInventario):
     text = f"""\
@@ -69,7 +70,7 @@ El equipo de UGR Recicla.
     message["To"] = receptor
     return message
 
-# Prepara el mensaje cuando alguien reserva un mueble (Delegando la comunicación)
+# Prepara el mensaje cuando alguien reserva un mueble 
 def mensajeReserva(nombre, cantidad, demandante, correo, receptor, restantes):
     text = f"""\
 ¡Hola!
