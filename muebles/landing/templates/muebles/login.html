@@ -1,6 +1,8 @@
 {% extends 'index.html' %}
 
 {% block pages %}
+    <li class="first" onclick='location.href="/{{URL}}";'>Portada</li>
+    <li onclick='location.href="/{{URL}}portada";'>Portada</li>
 {% endblock %}
 
 {% block content %}
@@ -19,7 +21,7 @@
 		<label for="email"><b>Email:</b></label>
 		<input type="text" placeholder="Introduzca su email" name="email" required>
 
-		<label for="psw"><b>Password:</b></label>
+		<label for="psw"><b>Contraseña:</b></label>
 		<input type="password" placeholder="Introduzca su contraseña" name="psw" required>
 		<button class="button" type="submit">Login</button>
 
@@ -27,5 +29,5 @@
 {% endblock %}
 
 {% block logged %}
-	<li class="last" onclick='location.href="/{{URL}}login";'>Register</a></li>
+	<li class="last" onclick='location.href="/{{URL}}registro";'>Registro</a></li>
 {% endblock %}

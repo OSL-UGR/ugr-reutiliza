@@ -21,61 +21,78 @@ file = open(str(settings.BASE_DIR) + "/credentials.txt", "r")
 # Estos 3 parámetros son los que hemos rellenado dentro de credentials.txt
 email = file.readline().strip('\n')
 password = file.readline().strip('\n')
-inventoryEmail = file.readline().strip('\n')
-file.close()
-
-# Prepara el mensaje del correo de inventarioReserva
-def mensajeInventarioReserva(nombreMueble, cantidad,
-                             demandante, puesto, organizacion, correo,
-                             correoInventario):
-
+# Prepara el mensaje del correo para el administrador/inventario
+def mensajeInventarioReserva(nombreMueble, cantidad, demandante, puesto, organizacion, correo, correoInventario):
     text = f"""\
-    {demandante}, {puesto}, de {organizacion} con correo {correo}
-    solicita {cantidad} del mueble {nombreMueble}.
-    """
+Hola,
 
+Se ha registrado una nueva solicitud en UGR Recicla que afecta al inventario.
+
+DETALLES DE LA SOLICITUD:
+- Mueble solicitado: {nombreMueble}
+- Cantidad: {cantidad} unidades
+
+DATOS DEL DEMANDANTE:
+- Nombre: {demandante}
+- Puesto: {puesto}
+- Organización: {organizacion}
+- Email de contacto: {correo}
+
+Este es un mensaje automático del portal UGR Recicla.
+    """
     message = MIMEText(text, "plain")
-    message["Subject"] = f"Reserva {nombreMueble}"
+    message["Subject"] = f"[UGR Recicla] Registro de reserva: {nombreMueble}"
     message["From"] = email
     message["To"] = correoInventario
     return message
 
-# Prepara el mensaje del correo de inventarioReserva
-def mensajeLiberacion(nombre, cantidad, demandante, correo, receptor,
-                      restantes):
+# Prepara el mensaje cuando alguien cancela su reserva
+def mensajeLiberacion(nombre, cantidad, demandante, correo, receptor, restantes):
     text = f"""\
-    El usuario {demandante} con correo {correo} ha liberado
-    {cantidad} elementos de este mueble.
+Hola,
 
-    Ahora quedan {restantes}.
+Te informamos de que el usuario {demandante} ha CANCELADO su reserva de tu anuncio en UGR Recicla.
+
+DETALLES DE LA CANCELACIÓN:
+- Mueble: {nombre}
+- Unidades liberadas: {cantidad}
+- Tu stock actual disponible: {restantes} unidades
+
+El anuncio vuelve a estar disponible para otros usuarios en el catálogo.
+
+Un saludo,
+El equipo de UGR Recicla.
     """
-
-    # Create MIMEText object
     message = MIMEText(text, "plain")
-    message["Subject"] = f"Liberacion reserva {nombre}"
+    message["Subject"] = f"[UGR Recicla] Reserva cancelada - {nombre}"
     message["From"] = email
     message["To"] = receptor
-
     return message
 
-# Prepara el mensaje del correo de mensajeReserva
-def mensajeReserva(nombre, cantidad, demandante, correo, receptor,
-                   restantes):
+# Prepara el mensaje cuando alguien reserva un mueble (Delegando la comunicación)
+def mensajeReserva(nombre, cantidad, demandante, correo, receptor, restantes):
     text = f"""\
-    El usuario {demandante} con correo {correo} ha reservado
-    {cantidad} elementos de este mueble.
+¡Hola!
 
-    Ahora quedan {restantes}.
+¡Buenas noticias! Alguien está interesado en un mueble que has ofertado en UGR Recicla.
+
+DETALLES DE LA RESERVA:
+- Mueble solicitado: {nombre}
+- Unidades solicitadas: {cantidad}
+- Unidades restantes en tu anuncio: {restantes}
+
+DATOS DEL CONTACTO:
+El usuario {demandante} ha realizado esta solicitud. 
+Por favor, PONTE EN CONTACTO DIRECTAMENTE CON ÉL a través de su correo electrónico ({correo}) para acordar la fecha, hora y lugar de recogida del mobiliario.
+
+Un saludo,
+El equipo de UGR Recicla.
     """
-
-    # Create MIMEText object
     message = MIMEText(text, "plain")
-    message["Subject"] = f"Nueva reserva {nombre}"
+    message["Subject"] = f"[UGR Recicla] ¡Nueva reserva de tu mueble {nombre}!"
     message["From"] = email
     message["To"] = receptor
-
     return message
-
 
 # Envía un email, los mensajes base son las funciones anteriores a esta.
 def sendMail(email, password, message, receptor):
@@ -491,7 +508,7 @@ def registroPage(request):
             context['error'] = "El usuario con los datos dados ya se encuentra registrado. Por favor inicie sesión"
             return render(request,'muebles/registro.html',context)
         
-        # Comprobamos que ese usuario intente registrarse con un email ya registrado
+        # Comprobamos que ese usuario no intente registrarse con un email ya registrado
         if Usuario.objects.filter(email=email).exists():
             context['error'] = "Ese correo electrónico ya está en uso, por favor ingrese otro"
             return render(request,"muebles/registro.html",context)
