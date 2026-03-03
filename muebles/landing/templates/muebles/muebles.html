@@ -51,6 +51,10 @@
 				<img src="{{ mueble.main_image.url }}" alt="Imágen mueble con id {{mueble.id}}">
 				<h3>Ubicación:</h3>
 				<p>{{ mueble.ubiInicial }}</p>
+
+				{% if mueble.stock_disponible <= 0 %}
+					<p class="stock-agotado">¡AGOTADO!</p>				
+				{% endif %}
 			</div>
 			{% endfor %}
 
@@ -94,35 +98,49 @@
 	</form>
 	<input class="button modify" type="button" value="Modificar" onclick='location.href="/{{URL}}{{ mueble.id }}/modify";'>
 	{% endif %}
+	
 	<div class="book-area">
-		{% if restantes > 0 and user != ofertante%}
-			<form action="book" class="book-info" method="post">
-				<input type="number" name="cantRes" class="book-ammount" min=1 max={{restantes}} value=1>
-				{% csrf_token %}
-				<input class="button book" type="submit" value="Reservar">
-			</form>
-		{% endif %}
-		{% if user != ofertante %}
-			{% if reserva != None %}
-				<p class="book-info"> Has reservado {{ reserva.cantidad }} de este mueble! </p>
-				<form action="unbook" method="post">
-					{% csrf_token %}
-					<input class = "button unbook" type="submit" value="Liberar reserva">
-				</form>
-			{% elif restantes == 0%}
-				<p class="book-info"> No quedan unidades de este mueble </p>
-			{% endif %}
-		{% else %}
-			{% if reservas == None %}
-				<p class="book-info"> <strong>Este mueble no ha sido reservado</strong></p>
-			{% else %}
-				{% for reserva in reservas %}
-					<p class="book-info"> <strong>{{ reserva.demandante.nombre }} {{ reserva.demandante.apellidos }}</strong> 
-					con email <strong>{{ reserva.demandante.email }}</strong> ha reservado {{ reserva.cantidad }} de este mueble</p>
-				{% endfor %}
-			{% endif %}
-		{% endif %}
-	</div>
+        {% if user != ofertante %}
+            {% if reserva %}
+                <div class="box-reserva-activa">
+                    <p class="book-info"> Has reservado <strong>{{ reserva.cantidad }}</strong> unidad(es) de este mueble.</p>
+                    <p class="book-info"> Estado actual: <strong>{{ reserva.estado }}</strong></p>
+                    
+                    {% if reserva.estado != 'Recogido' %}
+                    <form action="unbook" method="post">
+                        {% csrf_token %}
+                        <input class="button btn-cancelar-reserva" type="submit" value="Cancelar reserva">
+                    </form>
+                    {% endif %}
+                </div>
+                
+            {% else %}
+                {% if restantes > 0 %}
+                    <form action="book" class="book-info" method="post">
+                        <input type="number" name="cantRes" class="book-ammount" min="1" max="{{restantes}}" value="1">
+                        {% csrf_token %}
+                        <input class="button book" type="submit" value="Reservar">
+                    </form>
+                {% else %}
+                    <p class="book-info txt-agotado"> No quedan unidades de este mueble </p>
+                {% endif %}
+            {% endif %}
+
+        {% else %}
+            {% if not reservas %}
+                <p class="book-info"> <strong>Este mueble no tiene reservas activas.</strong></p>
+            {% else %}
+                <h2>Reservas en curso:</h2>
+                {% for res in reservas %}
+                    <div class="item-reserva-ofertante">
+                        <p class="book-info"><strong>{{ res.demandante.nombre }} {{ res.demandante.apellidos }}</strong> ({{ res.demandante.email }})</p>
+                        <p class="book-info">Ha reservado: {{ res.cantidad }} unidades | Estado: <strong>{{ res.estado }}</strong></p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+        
+    </div>
 	<t1>Descipción:</t1>
 	<p class="desc">{{ mueble.descripcion }}</p>
 	<t2>Ubicación:</t2>

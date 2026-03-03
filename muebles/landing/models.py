@@ -82,6 +82,18 @@ class Mueble(models.Model):
     cantidad = models.IntegerField(default=1)
     categoria = models.CharField(choices=categorias,
                                  default=categorias[0][0])
+    
+    # Añadimos una propiedad para que calcule en tiempo real el stock de un determinado mueble en todas las reservas
+    @property
+    def stock_disponible(self):
+
+        # Busca las reservas que están asociadas a ese mueble, excluyendo las que se encuentren canceladas
+        reservas_activas = self.reserva_set.exclude(estado='Cancelada')
+
+        # Sumamos la cantidad total
+        total_reservado = sum(reserva.cantidad for reserva in reservas_activas)
+
+        return self.cantidad - total_reservado
 
     def get_absolute_url(self):
         return f'/{self.id}/post'
@@ -94,16 +106,32 @@ class Foto(models.Model):
     def get_absolute_url(self):
         return f'{self.imagen.url}'
 
- # TODO: revisar por que si borramos un usuario que ha echo una reserva, la reserva no se borra si no que se mantiene. 
- # Esto creará un error, ya que con DO_NOTHING, al borrarlo no almacenará un valor null en ese parámetro. Esto quiere decir que
- # si accedemos a esa reserva EN TODOS LOS CASOSA se lanzará un error del tipo IntegrityError por la base de datos
- # Una reserva está asociado tanto a un demandante como a su mueble
+
 class Reserva(models.Model):
     mueble = models.ForeignKey(Mueble, on_delete=models.CASCADE)
     cantidad = models.IntegerField(default=1)
     demandante = models.ForeignKey(Usuario,
                                    on_delete=models.CASCADE,
                                    null=True)
+    
+    # Además de esto, hay también un estado "Publicado", pero este se calcula automaticamente como
+    # Publicados = (nºunidades total - nºunidades reservado/recodigo/retrasado) > 0
+    ESTADOS_RESERVA = (
+
+        ('Reservado', 'Reservado (En curso)'),
+        ('Recogido', 'Completada (Recogido)'),
+        ('Retrasado', 'Retrasado (+7 días)'),
+        ('Cancelada', 'Cancelada'),
+    )
+
+    estado = models.CharField(max_length=20, choices=ESTADOS_RESERVA, default='Reservado')
+
+    # Para almacenar cuando se hizo la resreva y cuando se va actualizando el estado
+    fecha_reserva = models.DateTimeField(default=timezone.now)
+    ultima_modificacion = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.mueble.nombre} - {self.demandante.nombre} ({self.estado})"
 
 
 @receiver([pre_delete, pre_save], sender=Foto)

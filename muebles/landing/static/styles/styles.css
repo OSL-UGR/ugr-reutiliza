@@ -775,4 +775,52 @@ t4 {
 
 /**************************************************************/
 /********************FIN DE PORTADA INICIAL********************/
-/******************************************************************/
+/**************************************************************/
+
+
+
+
+/***********************************************************/
+/**************** VISTA MUEBLE (nuevo) *********************/
+/***********************************************************/
+
+.stock-agotado {
+    color: #ff4444;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.box-reserva-activa {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    border: 1px solid #ddd;
+}
+
+
+.book-info strong {
+    color: #00308F;
+}
+
+.btn-cancelar-reserva {
+    background-color: #dc3545;
+    transition: background-color 0.3s;
+	padding: 15px;
+}
+
+.btn-cancelar-reserva:hover {
+    background-color: #c82333;
+}
+
+.txt-agotado {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.item-reserva-ofertante {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-top: 4px solid;
+}
+

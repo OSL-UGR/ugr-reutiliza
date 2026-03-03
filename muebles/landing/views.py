@@ -21,6 +21,7 @@ file = open(str(settings.BASE_DIR) + "/credentials.txt", "r")
 # Estos 3 parámetros son los que hemos rellenado dentro de credentials.txt
 email = file.readline().strip('\n')
 password = file.readline().strip('\n')
+inventoryEmail = file.readline().strip('\n')
 
 # Prepara el mensaje del correo para el administrador/inventario
 def mensajeInventarioReserva(nombreMueble, cantidad, demandante, puesto, organizacion, correo, correoInventario):
@@ -197,89 +198,54 @@ def loginPage(request):
 @login_required
 def unbookMueble(request, mueble_id):
     mueble = Mueble.objects.get(pk=mueble_id)
-    reservas = Reserva.objects.filter(mueble=mueble)
-    reserva = Reserva.objects.get(mueble=mueble, demandante=request.user)
+    usuario = Usuario.objects.get(email=request.user)
 
-    total = 0
-    for res in reservas:
-        total += res.cantidad
+    # Recuperamos la reserva activa del usuario
+    reserva = Reserva.objects.filter(mueble=mueble, demandante=usuario).exclude(estado='Cancelada').first()
+    
+    if request.method == "POST" and reserva:
+        demandante = reserva.demandante
+        
+        # El nuevo stock disponible será el actual más lo que estamos liberando
+        nuevo_stock = mueble.stock_disponible + reserva.cantidad
 
-    restantes = mueble.cantidad - total
-    demandante = reserva.demandante
-
-    if (request.method == "POST"):
-        mensaje = mensajeLiberacion(mueble.nombre, reserva.cantidad,
-                                    demandante.nombre + " " +
-                                    demandante.apellidos,
-                                    demandante.email, mueble.ofertante.email,
-                                    restantes + reserva.cantidad)
-
-        Thread(target=sendMail,
-               args=(email, password, mensaje, mueble.ofertante.email)).start()
-        reserva.delete()
+        mensaje = mensajeLiberacion(mueble.nombre, reserva.cantidad, demandante.nombre + " " + demandante.apellidos, demandante.email, mueble.ofertante.email, nuevo_stock)
+        Thread(target=sendMail, args=(email, password, mensaje, mueble.ofertante.email)).start()
+        
+        reserva.estado = 'Cancelada'
+        reserva.save()
+        
         return redirect(f"/{URL}{mueble_id}/post")
     else:
         return redirect("index")
-
 # Función que reserva un mueble
 @login_required
 def bookMueble(request, mueble_id):
-    # Cargamos el mueble y todas las reservas que exixten para este
     mueble = Mueble.objects.get(pk=mueble_id)
-    reservas = Reserva.objects.filter(mueble=mueble)
-
-    #Obtenemos cuantos items quiere el usuario
     peticion = int(request.POST['cantRes'])
-    existente = False
+    restantes = mueble.stock_disponible 
+    demandante = Usuario.objects.get(email=request.user)
 
-    total = 0
-    # Recorremos todas las reservas para contabilizar cuantas unidades están ocupadas.  
-    for reserva in reservas:
-        #Identifica si el usuario ya había reservado anteriormente de ese mueble
-        if (reserva.demandante == request.user):
-            reservaUser = reserva
-            existente = True
-        total += reserva.cantidad
-
-    # Vemos cuantos quedan libres
-    restantes = mueble.cantidad - total
-    demandante = Usuario.objects.get(pk=request.user)
-
-    # Si hay stock disponible gestionamos la reserva
-    if (request.method == "POST" and restantes - peticion >= 0):
-        #Si ya tenía una reserva, simplemente sumamos la nueva cantidad solicitada
-        if (existente):
-            reserva = reservaUser
+    if request.method == "POST" and (restantes - peticion) >= 0:
+        
+        reserva = Reserva.objects.filter(mueble=mueble, demandante=demandante).exclude(estado='Cancelada').first()        
+        if reserva:
             reserva.cantidad += peticion
         else:
-            #Definimos la reserva
-            reserva = Reserva(mueble=mueble, cantidad=peticion,
-                              demandante=request.user)
+            reserva = Reserva(mueble=mueble, cantidad=peticion, demandante=request.user)
             
-        # Obtenemos el nombre del demandante
-        nombreDemandante = demandante.nombre + " " + demandante.apellidos
+        nombreDemandante = f"{demandante.nombre} {demandante.apellidos}"
 
-        #Definimos ellos mensajes de la reserva y envíamos el email corespondiente
-        mensaje = mensajeReserva(mueble.nombre, peticion,
-                                 nombreDemandante, demandante.email,
-                                 mueble.ofertante.email, restantes - peticion)
-
-        Thread(target=sendMail,
-               args=(email, password, mensaje, mueble.ofertante.email)).start()
+        # Correo al ofertante
+        mensaje = mensajeReserva(mueble.nombre, peticion, nombreDemandante, demandante.email, mueble.ofertante.email, restantes - peticion)
+        Thread(target=sendMail, args=(email, password, mensaje, mueble.ofertante.email)).start()
         
-        mensaje = mensajeInventarioReserva(mueble.nombre, peticion,
-                                           nombreDemandante,
-                                           demandante.puesto,
-                                           demandante.organizacion,
-                                           demandante.email, inventoryEmail)
-        Thread(target=sendMail,
-               args=(email, password, mensaje, inventoryEmail)).start()
+        # Correo al inventario 
+        mensaje_inv = mensajeInventarioReserva(mueble.nombre, peticion, nombreDemandante, demandante.puesto, demandante.organizacion, demandante.email, inventoryEmail)
+        Thread(target=sendMail, args=(email, password, mensaje_inv, inventoryEmail)).start()
+        
         reserva.save()
-
         return redirect(f"/{URL}{mueble_id}/post")
-    
-    #No gestionamos la reserva, no hay stock suficiente y redirigimos a index
-    #TODO: mostrar mensaje de advertencia de que no se ha podido gestionar la reserva por falta de stock
     else:
         return redirect("index")
 
@@ -398,39 +364,30 @@ def perfil(request):
 @login_required
 def post(request, mueble_id):
 
-    # Obtenemos el mueble, quien es el ofertante y cuantas reservas tiene
+    # Obtenemos el mueble, quien es el ofertante y cuantas reservas tiene (filtrando solo las que no estan canceladas)
     mueble = Mueble.objects.get(pk=mueble_id)
     ofertante = mueble.ofertante
-    reservas = Reserva.objects.filter(mueble=mueble)
 
-    # Calculamos la disponibilidad de el mueble
-    total = 0
-    demandantes = []
-    for reserva in reservas:
-        demandantes.append(reserva.demandante) # Para ver quienes han demandado el mueble
-        total += reserva.cantidad
+    usuario = Usuario.objects.get(email=request.user)
 
-    # Vemos si el usuario logueado, tiene ya una reserva o no. Para definir una acción en el html.
-    try:
-        reserva = Reserva.objects.get(mueble=mueble, demandante=request.user)
-    except:
-        reserva = None
+    reservas_activas = Reserva.objects.filter(mueble=mueble).exclude(estado='Cancelada')
+    demandantes = [reserva.demandante for reserva in reservas_activas]
 
+    reserva = reservas_activas.filter(demandante=usuario).first()
 
     # Crea la lista de imágenes definiendo la primera como la portada
     imagenes = [mueble.main_image]
     fotos = Foto.objects.filter(mueble=mueble)
-    usuario = Usuario.objects.get(email=request.user)
 
     for foto in fotos:
         imagenes.append(foto.imagen)
 
     # Pasamos los atributos al html
     context = {
-            'restantes': mueble.cantidad - total,
+            'restantes':  mueble.stock_disponible, # Lo cojemos directamente del calculo que hace el modelo
             'mueble': mueble,
             'ofertante': ofertante,
-            'reservas': reservas,
+            'reservas': reservas_activas,
             'reserva': reserva,
             'demandantes': demandantes,
             'images': imagenes,
