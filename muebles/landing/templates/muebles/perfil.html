@@ -9,44 +9,112 @@
 
 {% block content %}
 <div class="info-perfil">
-	<div class="nom">
-		<h1>{{user.nombre}} {{user.apellidos}}</h1>
+    <div class="nom">
+        <h1>{{user.nombre}} {{user.apellidos}}</h1>
+    </div>
+    <t1>Email</t1>
+    <div class="email">
+        <p>{{user.email}}</p>
+    </div>
+    <t2>Organizacion</t2>
+    <div class="organizacion">
+        <p>{{user.organizacion}}</p>
+    </div>
+    <t3>Puesto</t3>
+    <div class="puesto">
+        <p>{{user.puesto}}</p>
+    </div>
+    <t4>Teléfono</t4>
+    <div class="tel">
+        <p>{{user.telefono}}</p>
+    </div>
+</div>
+
+<div class="tabs-container">
+	<button class="tab-link activate" onclick="openTab(event,'MisArticulos')">Mis Artículos ({{ mis_muebles|length }}) </button>
+	<button class="tab-link" onclick="openTab(event, 'MisSolicitudes')">Mis Solicitudes ({{ mis_solicitudes|length }}) </button>
+</div>
+
+<div id="MisArticulos" class="tab-content" style="display: block;">
+
+	<div class="filtros-estado">
+		<button class="btn-filtro filtro-articulos active" onclick="filtrar(event, 'Todos', 'mueble-container', 'filtro-articulos')">Todos</button>
+        <button class="btn-filtro filtro-articulos" onclick="filtrar(event, 'Publicado', 'mueble-container', 'filtro-articulos')">Publicados</button>
+        <button class="btn-filtro filtro-articulos" onclick="filtrar(event, 'Agotado', 'mueble-container', 'filtro-articulos')">Agotados</button>
 	</div>
-	<t1>Email</t1>
-	<div class="email">
-		<p>{{user.email}}</p>
-	</div>
-	<t2>Organizacion</t2>
-	<div class="organizacion">
-		<p>{{user.organizacion}}</p>
-	</div>
-	<t3>Puesto</t3>
-	<div class="puesto">
-		<p>{{user.puesto}}</p>
-	</div>
-	<t4>Teléfono</t4>
-	<div class="tel">
-		<p>{{user.telefono}}</p>
+
+	{% if mis_muebles %}
+		<div class="muebles-table">
+			
+			{% for mueble in mis_muebles %}
+			
+			<div data-estado="{% if mueble.stock_disponible > 0 %}Publicado{% else %}Agotado{% endif %}" 
+				onclick='location.href="/{{URL}}{{mueble.id}}/post";' 
+				class="mueble-container {% if mueble.stock_disponible <= 0 %}agotado{% endif %}">
+				
+				<h2>{{ mueble.nombre }}</h2>
+				<br>
+				{% load static %}
+				<img src="{{ mueble.main_image.url }}" alt="Imágen mueble con id {{mueble.id}}">
+				<h3>Ubicación:</h3>
+				<p>{{ mueble.ubiInicial }}</p>
+				{% if mueble.stock_disponible <= 0 %}
+					<p class="stock-agotado">¡AGOTADO!</p>              
+				{% endif %}
+			</div>
+			{% endfor %}
+		</div>
+		{% else %}
+		<div class="empty-state">
+			<p>Aún no has subido ningún artículo.</p>
+		</div>
+    {% endif %}
+</div>
+
+<div id="MisSolicitudes" class="tab-content" style="display: block;">
+
+	<div>
+		<button class="btn-filtro filtro-solicitudes active" onclick="filtrar(event, 'Todos', 'solicitud-card', 'filtro-solicitudes')">Todas</button>
+		<button class="btn-filtro filtro-solicitudes" onclick="filtrar(event, 'Reservado', 'solicitud-card', 'filtro-solicitudes')">En curso</button>
+        <button class="btn-filtro filtro-solicitudes" onclick="filtrar(event, 'Recogido', 'solicitud-card', 'filtro-solicitudes')">Completadas</button>
+        <button class="btn-filtro filtro-solicitudes" onclick="filtrar(event, 'Retrasado', 'solicitud-card', 'filtro-solicitudes')">Retrasadas</button>
+        <button class="btn-filtro filtro-solicitudes" onclick="filtrar(event, 'Cancelada', 'solicitud-card', 'filtro-solicitudes')">Canceladas</button>
+
+		{% if mis_solicitudes %}
+				<div class="muebles-table">
+
+					{% for reserva in mis_solicitudes %}
+					
+					<div class="mueble-container solicitud-card {% if reserva.estado == 'Cancelada' %}agotado{% endif %}" data-estado="{{ reserva.estado }}" onclick='location.href="/{{URL}}{{reserva.mueble.id}}/post";'>
+						
+						<h2>{{ reserva.mueble.nombre }}</h2>
+						<br>
+						<img src="{{ reserva.mueble.main_image.url }}" alt="Imagen de {{ reserva.mueble.nombre }}">
+						
+						<p><b>Ofertante: </b> {{ reserva.mueble.ofertante.nombre }} {{ reserva.mueble.ofertante.apellidos }}</p>
+						<p><b>Uds. reservadas: </b>{{ reserva.cantidad }}</p>
+						<h3><b>Fecha reserva: </b>{{ reserva.fecha_reserva|date:"d/m/Y" }}</h3>
+
+						<div>
+							<span class="badge-estado badge-{{ reserva.estado|lower }}">{{ reserva.estado }}</span>
+						</div>
+						
+					</div>
+				{% endfor %}	
+			</div>
+		{% else %}
+			<div class="empty-state">
+				<p>No tienes ninguna reserva activa ni pasada.</p>
+			</div>
+		{% endif %}
 	</div>
 </div>
-{% if listaMuebles %}
-<div class="muebles-table">
-	{% for mueble in listaMuebles %}
-	<div onclick='location.href="/{{URL}}{{mueble.id}}/post";' class="mueble-container">
-		<h2>{{ mueble.nombre }}</h2>
-		<br>
-		{% load static %}
-		<img src="{{ mueble.main_image.url }}" alt="Imágen mueble con id {{mueble.id}}">
-		<h3>Ubicación:</h3>
-		<p>{{ mueble.ubiInicial }}</p>
-	</div>
-	{% endfor %}
-</div>
-{% elif not mueble %}
-<div class="muebles-table">
-	<p>No muebles are available</p>
-</div>
-{% endif %}
+
+
+{% load static %}
+
+<script src="{% static 'js/perfil.js' %}"></script>
+
 {% endblock %}
 {% block logged %}
 <li class="last" onclick='location.href="/{{URL}}logout";'>Log out</a></li>
