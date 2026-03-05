@@ -25,32 +25,65 @@ email = file.readline().strip('\n')
 password = file.readline().strip('\n')
 inventoryEmail = file.readline().strip('\n')
 
-# Prepara el mensaje del correo para el administrador/inventario
-def mensajeInventarioReserva(nombreMueble, cantidad, demandante, puesto, organizacion, correo, correoInventario):
+# /*************************************************************************************************/
+# /********************* COMIENZO DE FUNCIONES DERIVADAS AL CORREO ELECTRÓNICO *********************/
+# /*************************************************************************************************/
+
+
+# Correo para el ofertante al realizar una reserva sobre uno de sus artículos
+def mensajeReservaOfertante(nombre, cantidad, demandante, correo_demandante, receptor, restantes):
     text = f"""\
-Hola,
+¡Hola!
 
-Se ha registrado una nueva solicitud en UGR Recicla que afecta al inventario.
+¡Buenas noticias! Alguien está interesado en un mueble que has ofertado en UGR Recicla.
 
-DETALLES DE LA SOLICITUD:
-- Mueble solicitado: {nombreMueble}
-- Cantidad: {cantidad} unidades
+DETALLES DE LA RESERVA:
+- Mueble: {nombre}
+- Unidades solicitadas: {cantidad}
+- Tu stock restante: {restantes}
 
-DATOS DEL DEMANDANTE:
-- Nombre: {demandante}
-- Puesto: {puesto}
-- Organización: {organizacion}
-- Email de contacto: {correo}
+DATOS DEL CONTACTO:
+El usuario {demandante} ha realizado esta solicitud. 
+Por favor, PONTE EN CONTACTO DIRECTAMENTE CON ÉL a través de su correo electrónico ({correo_demandante}) para acordar la fecha, hora y lugar de recogida.
 
-Este es un mensaje automático del portal UGR Recicla.
+IMPORTANTE: Cuando entregues el material, no olvides entrar a tu perfil de UGR Recicla y marcar la reserva como 'Recogida'. Tienes 7 días naturales antes de que el sistema la marque como retrasada.
+
+Un saludo,
+El equipo de UGR Recicla.
     """
     message = MIMEText(text, "plain")
-    message["Subject"] = f"[UGR Recicla] Registro de reserva: {nombreMueble}"
+    message["Subject"] = f"[UGR Recicla] ¡Nueva reserva de tu anuncio: {nombre}!"
     message["From"] = email
-    message["To"] = correoInventario
+    message["To"] = receptor
     return message
 
-# Prepara el mensaje cuando alguien cancela su reserva
+# Correo para el demandante al realizar una reserva sobre un artículo
+def mensajeReservaDemandante(nombre, cantidad, ofertante, correo_ofertante, receptor):
+    text = f"""\
+¡Hola!
+
+Has reservado con éxito un artículo en UGR Recicla.
+
+DETALLES DE TU RESERVA:
+- Mueble: {nombre}
+- Unidades reservadas: {cantidad}
+
+¿QUÉ DEBES HACER AHORA?
+Por favor, contacta directamente con {ofertante} a través de su correo electrónico ({correo_ofertante}) para organizar la recogida del material.
+
+IMPORTANTE: Dispones de un plazo máximo de 7 días naturales desde hoy para efectuar la recogida. Pasado ese tiempo, el ofertante tendrá derecho a cancelar tu reserva y volver a publicar el artículo.
+
+Un saludo,
+El equipo de UGR Recicla.
+    """
+    message = MIMEText(text, "plain")
+    message["Subject"] = f"[UGR Recicla] Confirmación de tu reserva: {nombre}"
+    message["From"] = email
+    message["To"] = receptor
+    return message
+
+
+# Correo tras la cancelación de una reserva por parte de un ofertante
 def mensajeLiberacion(nombre, cantidad, demandante, correo, receptor, restantes):
     text = f"""\
 Hola,
@@ -73,27 +106,55 @@ El equipo de UGR Recicla.
     message["To"] = receptor
     return message
 
-# Prepara el mensaje cuando alguien reserva un mueble 
-def mensajeReserva(nombre, cantidad, demandante, correo, receptor, restantes):
+# Correo trás el retraso (7 días) al ofertante de anuncio
+def mensajeRetrasoOfertante(nombre, cantidad, demandante, correo_demandante, receptor):
     text = f"""\
-¡Hola!
+Hola,
 
-¡Buenas noticias! Alguien está interesado en un mueble que has ofertado en UGR Recicla.
+Te informamos de que una reserva de tu anuncio "{nombre}" ha superado el plazo máximo de recogida de 7 días y ha sido marcada automáticamente como RETRASADA.
 
-DETALLES DE LA RESERVA:
-- Mueble solicitado: {nombre}
-- Unidades solicitadas: {cantidad}
-- Unidades restantes en tu anuncio: {restantes}
+DATOS DE LA RESERVA:
+- Unidades: {cantidad}
+- Solicitante: {demandante} ({correo_demandante})
 
-DATOS DEL CONTACTO:
-El usuario {demandante} ha realizado esta solicitud. 
-Por favor, PONTE EN CONTACTO DIRECTAMENTE CON ÉL a través de su correo electrónico ({correo}) para acordar la fecha, hora y lugar de recogida del mobiliario.
+¿QUÉ PUEDES HACER AHORA?
+Accede a tu perfil de UGR Recicla. Tienes dos opciones:
+1. Si ya se lo entregaste y olvidaste registrarlo en la app, por favor, márcalo como 'Recogido' para cerrar el proceso.
+2. Si el solicitante no ha aparecido, puedes cancelar la reserva pulsando en 'Volver a publicar' para que el artículo regrese al catálogo.
+
+Aun así, si sigues interesado en la entrega, siempre puedes escribirle directamente a su correo.
 
 Un saludo,
 El equipo de UGR Recicla.
     """
     message = MIMEText(text, "plain")
-    message["Subject"] = f"[UGR Recicla] ¡Nueva reserva de tu mueble {nombre}!"
+    message["Subject"] = f"[UGR Recicla] AVISO: Reserva retrasada - {nombre}"
+    message["From"] = email
+    message["To"] = receptor
+    return message
+
+# Correo trás el retraso (7 días) al demandante del anuncio.
+def mensajeRetrasoDemandante(nombre, cantidad, ofertante, correo_ofertante, receptor):
+    text = f"""\
+Hola,
+
+Nos ponemos en contacto contigo para avisarte de que ha expirado el plazo de 7 días para recoger tu reserva en UGR Recicla.
+
+DATOS DE LA RESERVA:
+- Mueble: {nombre} ({cantidad} unidades)
+- Ofertante: {ofertante} ({correo_ofertante})
+
+¿QUÉ HA PASADO?
+La reserva ha sido marcada como RETRASADA. El dueño del artículo ahora tiene la opción de cancelar tu solicitud y volver a publicarlo.
+
+- Si sigues interesado en el material, por favor, contacta urgentemente con {ofertante} en su correo electrónico.
+- Si ya has recogido el material pero sigue saliendo en curso, avisa al ofertante para que lo marque como 'Recogido' en su perfil de la aplicación.
+
+Un saludo,
+El equipo de UGR Recicla.
+    """
+    message = MIMEText(text, "plain")
+    message["Subject"] = f"[UGR Recicla] URGENTE: Plazo de recogida expirado - {nombre}"
     message["From"] = email
     message["To"] = receptor
     return message
@@ -108,18 +169,44 @@ def sendMail(email, password, message, receptor):
         server.close()
 
 
+# /********************************************************************************************/
+# /********************* FIN DE FUNCIONES DERIVADAS AL CORREO ELECTRÓNICO *********************/
+# /********************************************************************************************/
+
+
 # Busca todas las reservas en estado 'Reservado' que tengan más de 7 días, y las pasa automáticamente a estado 'Retrasado'
 def actualizar_reservas_retrasadas():
 
     # Calculamos el límite de tiempo de 7 días con respecto al día actual (la fecha inicial límite)
     # Ej: (5 de marzo de 2026 a las 10:00:00) - 7 días = (26 de febrero de 2026 a las 10:00:00)
-    limite = timezone.now() - timedelta(days=7)
+    limite = timezone.now() - timedelta(days=1)
 
     # Vemos que reservas se hicieron antes de esa fecha límite 
     reservas_retrasadas = Reserva.objects.filter(estado='Reservado', fecha_reserva__lt=limite)
 
     if reservas_retrasadas.exists():
-        reservas_retrasadas.update(estado='Retrasado')
+        # Recorremos todas las reservas
+
+        for reserva in reservas_retrasadas:
+
+            ofertante = reserva.mueble.ofertante
+            nombre_ofer = f"{ofertante.nombre} {ofertante.apellidos}"
+
+            demandante = reserva.demandante
+            nombre_deman = f"{demandante.nombre} {demandante.apellidos}"
+
+            # Envíamos los correos con toda la información
+            msg_ofer = mensajeRetrasoOfertante(reserva.mueble.nombre, reserva.cantidad, nombre_deman, demandante.email,ofertante.email)
+            Thread(target=sendMail, args=(email, password, msg_ofer, ofertante.email)).start()
+
+            msg_deman = mensajeRetrasoDemandante(reserva.mueble.nombre, reserva.cantidad, nombre_ofer, ofertante.email, demandante.email)
+            Thread(target=sendMail, args=(email, password, msg_deman, correo_deman)).start()
+
+            # Realizamos el cambio de estado
+            reserva.estado =  'Retrasado'
+            reserva.save()
+
+
 
 def mueblesCat(listaCat):
     muebles = Mueble.objects.filter(categoria__in=listaCat)
@@ -254,11 +341,11 @@ def bookMueble(request, mueble_id):
         nombreDemandante = f"{demandante.nombre} {demandante.apellidos}"
 
         # Correo al ofertante
-        mensaje = mensajeReserva(mueble.nombre, peticion, nombreDemandante, demandante.email, mueble.ofertante.email, restantes - peticion)
+        mensaje = mensajeReservaOfertante(mueble.nombre, peticion, nombreDemandante, demandante.email, mueble.ofertante.email, restantes - peticion)
         Thread(target=sendMail, args=(email, password, mensaje, mueble.ofertante.email)).start()
         
-        # Correo al inventario 
-        mensaje_inv = mensajeInventarioReserva(mueble.nombre, peticion, nombreDemandante, demandante.puesto, demandante.organizacion, demandante.email, inventoryEmail)
+        # Correo al demandante 
+        mensaje_inv = mensajeReservaDemandante(mueble.nombre, peticion, nombreDemandante, demandante.puesto, demandante.organizacion, demandante.email, inventoryEmail)
         Thread(target=sendMail, args=(email, password, mensaje_inv, inventoryEmail)).start()
         
         reserva.save()
@@ -371,11 +458,16 @@ def perfil(request):
 
     actualizar_reservas_retrasadas() # Actualiza posibles reservas retrasadas por tiempo
 
-    user = request.user
-    listaMuebles = Mueble.objects.filter(ofertante=user)
+    usuario = Usuario.objects.get(email=request.user)
+
+    # Pasamos las dos listas, la de mis artículos y las de mis solicitudes
+    mis_muebles = Mueble.objects.filter(ofertante=usuario).order_by('-id')
+    mis_solicitudes = Reserva.objects.filter(demandante=usuario).order_by('-fecha_reserva')
+
     context = {
-            "user": user,
-            "listaMuebles": listaMuebles,
+            "user": usuario,
+            "mis_muebles": mis_muebles,
+            "mis_solicitudes": mis_solicitudes,
             "URL": URL
             }
     return render(request, "muebles/perfil.html", context)
@@ -451,7 +543,7 @@ def portada(request):
 
     #Si el usuario ya guarda la sesión, lo mandamos directamente al catálogo
     if request.user.is_authenticated:
-        
+
         return redirect("index")
 
     #Si no, le mostramos la portada
