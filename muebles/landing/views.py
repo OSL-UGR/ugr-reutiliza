@@ -8,6 +8,8 @@ from .models import Mueble, Foto, Usuario, Reserva, DniAutorizado, categorias as
 from threading import Thread
 import smtplib
 from email.mime.text import MIMEText
+from django.utils import timezone
+from datetime import timedelta
 
 
 URL = ''
@@ -106,6 +108,19 @@ def sendMail(email, password, message, receptor):
         server.close()
 
 
+# Busca todas las reservas en estado 'Reservado' que tengan más de 7 días, y las pasa automáticamente a estado 'Retrasado'
+def actualizar_reservas_retrasadas():
+
+    # Calculamos el límite de tiempo de 7 días con respecto al día actual (la fecha inicial límite)
+    # Ej: (5 de marzo de 2026 a las 10:00:00) - 7 días = (26 de febrero de 2026 a las 10:00:00)
+    limite = timezone.now() - timedelta(days=7)
+
+    # Vemos que reservas se hicieron antes de esa fecha límite 
+    reservas_retrasadas = Reserva.objects.filter(estado='Reservado', fecha_reserva__lt=limite)
+
+    if reservas_retrasadas.exists():
+        reservas_retrasadas.update(estado='Retrasado')
+
 def mueblesCat(listaCat):
     muebles = Mueble.objects.filter(categoria__in=listaCat)
 
@@ -127,6 +142,8 @@ def permisoModificar(email, mueble_id):
 # Tablón principal.
 @login_required
 def index(request):
+
+    actualizar_reservas_retrasadas() # Actualiza posibles reservas retrasadas por tiempo
 
     listaMuebles = Mueble.objects.order_by("-id") # El -id devuelve los muebles del ás nuevo al más antiguo.
     categorias = [] 
@@ -351,6 +368,9 @@ def logoutPage(request):
 # Pantalla de perfil (solo puedes ver tu perfil)
 @login_required
 def perfil(request):
+
+    actualizar_reservas_retrasadas() # Actualiza posibles reservas retrasadas por tiempo
+
     user = request.user
     listaMuebles = Mueble.objects.filter(ofertante=user)
     context = {
@@ -363,6 +383,9 @@ def perfil(request):
 # Prepara todos los atributos de información sobre un mueble para mostrarlos, dado el id de un mueble
 @login_required
 def post(request, mueble_id):
+
+    actualizar_reservas_retrasadas() # Actualiza posibles reservas retrasadas por tiempo
+
 
     # Obtenemos el mueble, quien es el ofertante y cuantas reservas tiene (filtrando solo las que no estan canceladas)
     mueble = Mueble.objects.get(pk=mueble_id)
@@ -428,7 +451,7 @@ def portada(request):
 
     #Si el usuario ya guarda la sesión, lo mandamos directamente al catálogo
     if request.user.is_authenticated:
-
+        
         return redirect("index")
 
     #Si no, le mostramos la portada
