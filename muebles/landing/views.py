@@ -185,8 +185,8 @@ def actualizar_reservas_retrasadas():
     reservas_retrasadas = Reserva.objects.filter(estado='Reservado', fecha_reserva__lt=limite)
 
     if reservas_retrasadas.exists():
+        
         # Recorremos todas las reservas
-
         for reserva in reservas_retrasadas:
 
             ofertante = reserva.mueble.ofertante
@@ -200,7 +200,7 @@ def actualizar_reservas_retrasadas():
             Thread(target=sendMail, args=(email, password, msg_ofer, ofertante.email)).start()
 
             msg_deman = mensajeRetrasoDemandante(reserva.mueble.nombre, reserva.cantidad, nombre_ofer, ofertante.email, demandante.email)
-            Thread(target=sendMail, args=(email, password, msg_deman, correo_deman)).start()
+            Thread(target=sendMail, args=(email, password, msg_deman, demandante.email)).start()
 
             # Realizamos el cambio de estado
             reserva.estado =  'Retrasado'
