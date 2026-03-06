@@ -50,6 +50,9 @@ urlpatterns = [
         #TODO: encontrar el html o e que caso borraríamos solo escribiendo el id y quitar esto. Debería siempre usarse la anterior ruta
         path("<int:mueble_id>/", views.deleteMueble, name="delete"),
 
+        path('<int:reserva_id>/entregado', views.marcar_entregado, name='marcar_entregado'),
+        path('<int:reserva_id>/republicar', views.republicar_retrasado, name='republicar_retrasado'),
+
         # TODO Panel de administrador personalizado:
         path("usuarios", views.gestion_usuarios, name="gestion_usuarios"),
         path("usuarios/delete/<str:email>", views.delete_usuario, name="delete_usuario"),

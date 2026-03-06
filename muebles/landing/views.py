@@ -617,3 +617,33 @@ def registroPage(request):
 
         return render(request, "muebles/registro.html", context)
 
+# Cambia el estado de una reserva a entregado
+@login_required
+def marcar_entregado(request, reserva_id):
+
+    reserva = Reserva.objects.get(pk=reserva_id)
+    usuario = Usuario.objects.get(email=request.user)
+    
+    # Solo puede cambiar el estado el dueño del mueble
+    if usuario == reserva.mueble.ofertante:
+        if request.method == "POST":
+            reserva.estado = 'Recogido'
+            reserva.save()
+
+    return redirect(f"/{URL}{reserva.mueble.id}/post")
+
+# Cambia el estado de una reserva cancelandola, y liberando su stock
+def republicar_retrasado(request, reserva_id):
+
+    reserva = Reserva.objects.get(pk=reserva_id)
+    usuario = Usuario.objects.get(email=request.user)
+
+    # SOlo puede cambiar el estado el dueño del mueble
+    if usuario == reserva.mueble.ofertante:
+        if request.method == "POST":
+            reserva.estado = 'Cancelada'
+            reserva.save()
+
+            #TODO: añadir un mensaje por correo al queha perdido la reserva notificandoselo
+
+    return redirect(f"/{URL}{reserva.mueble.id}/post")
