@@ -692,7 +692,6 @@ t4 {
     border-bottom: 2px solid #ddd;
 }
 
-/* Etiquetas de roles */
 .role-superadmin {
     color: red;
     font-weight: bold;
