@@ -822,7 +822,7 @@ t4 {
 }
 
 
-/***************************************************************/
+/****************************************************************/
 /**************** FIN VISTA MUEBLE (nuevo) *********************/
 /**************************************************************/
 
@@ -932,3 +932,49 @@ t4 {
 /***********************************************************/
 /******************** FIN DE PERFIL ***********************/
 /*********************************************************/
+
+/***********************************************************/
+/**************** ACCIONES DEL OFERTANTE ******************/
+/*********************************************************/
+
+.acciones-reserva {
+    display: flex;
+	justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.btn-accion {
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    transition: background-color 0.3s ease, transform 0.1s;
+}
+
+.btn-accion:active {
+    transform: scale(0.98);
+}
+
+.btn-entregar {
+    background-color: #28a745;
+}
+
+.btn-entregar:hover {
+    background-color: #218838;
+}
+
+.btn-republicar {
+    background-color: #dc3545;
+}
+
+.btn-republicar:hover {
+    background-color: #c82333;
+}
+
+/****************************************************************/
+/**************** FIN ACCIONES DEL OFERTANTE *******************/
+/**************************************************************/

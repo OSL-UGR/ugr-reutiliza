@@ -125,15 +125,34 @@
                 {% endif %}
             {% endif %}
 
-        {% else %}
+{% else %}
             {% if not reservas %}
                 <p class="book-info"> <strong>Este mueble no tiene reservas activas.</strong></p>
             {% else %}
-                <h2>Reservas en curso:</h2>
+                <h2>Gestión de reservas:</h2>
                 {% for res in reservas %}
                     <div class="item-reserva-ofertante">
                         <p class="book-info"><strong>{{ res.demandante.nombre }} {{ res.demandante.apellidos }}</strong> ({{ res.demandante.email }})</p>
                         <p class="book-info">Ha reservado: {{ res.cantidad }} unidades | Estado: <strong>{{ res.estado }}</strong></p>
+                        
+                        <div class="acciones-reserva">
+                            
+                            {% if res.estado == 'Reservado' or res.estado == 'Retrasado' %}
+                                <form action="/{{URL}}{{res.id}}/entregado" method="post">
+                                    {% csrf_token %}
+                                    <input type="submit" class="btn-accion btn-entregar" value="Marcar como Entregado">
+                                </form>
+                            {% endif %}
+                            
+                            {% if res.estado == 'Retrasado' %}
+                                <form action="/{{URL}}{{res.id}}/republicar" method="post">
+                                    {% csrf_token %}
+                                    <input type="submit" class="btn-accion btn-republicar" value="Cancelar y Republicar">
+                                </form>
+                            {% endif %}
+                            
+                        </div>
+                        
                     </div>
                 {% endfor %}
             {% endif %}
