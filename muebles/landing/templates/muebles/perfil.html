@@ -91,7 +91,7 @@
                 <h3><b>Fecha reserva: </b>{{ reserva.fecha_reserva|date:"d/m/Y" }}</h3>
 
                 <div style="margin-top: 15px;">
-                    <span class="badge-estado badge-{{ reserva.estado|lower }}">{{ reserva.estado }}</span>
+                    <span class="badge-{{ reserva.estado|lower }}">{{ reserva.estado }}</span>
                 </div>
                 
             </div>

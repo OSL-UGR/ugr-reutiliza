@@ -213,11 +213,11 @@ def mueblesCat(listaCat):
 
     return muebles
 
-# Solo el personal de administración (is_staff o is_superuser) pueden modificar muebles
+# Todo el mundo puede añadir anuncios
 def permisoAñadir(email):
     usuario = Usuario.objects.get(pk=email)
     return (usuario.is_staff or
-            usuario.is_superuser)
+            usuario.is_superuser or usuario.is_active)
 
 # Puedes modificar un anuncio si: eres "is_superuser" o eres "is_staff" y el anuncio es tuyo.
 def permisoModificar(email, mueble_id):
@@ -339,14 +339,15 @@ def bookMueble(request, mueble_id):
             reserva = Reserva(mueble=mueble, cantidad=peticion, demandante=request.user)
             
         nombreDemandante = f"{demandante.nombre} {demandante.apellidos}"
+        nombreOfertante = f"{mueble.ofertante.nombre} {mueble.ofertante.apellidos}"
 
         # Correo al ofertante
-        mensaje = mensajeReservaOfertante(mueble.nombre, peticion, nombreDemandante, demandante.email, mueble.ofertante.email, restantes - peticion)
-        Thread(target=sendMail, args=(email, password, mensaje, mueble.ofertante.email)).start()
+        mensaje_ofer = mensajeReservaOfertante(mueble.nombre, peticion, nombreDemandante, demandante.email, mueble.ofertante.email, restantes - peticion)
+        Thread(target=sendMail, args=(email, password, mensaje_ofer , mueble.ofertante.email)).start()
         
         # Correo al demandante 
-        mensaje_inv = mensajeReservaDemandante(mueble.nombre, peticion, nombreDemandante, demandante.puesto, demandante.organizacion, demandante.email, inventoryEmail)
-        Thread(target=sendMail, args=(email, password, mensaje_inv, inventoryEmail)).start()
+        mensaje_deman = mensajeReservaDemandante(mueble.nombre, peticion, nombreOfertante, mueble.ofertante.email, demandante.email)
+        Thread(target=sendMail, args=(email, password, mensaje_deman, demandante.email)).start()
         
         reserva.save()
         return redirect(f"/{URL}{mueble_id}/post")
@@ -569,7 +570,7 @@ def registroPage(request):
         apellidos = request.POST.get('apellidos','')
         puesto = request.POST.get('puesto','')
         telefono = request.POST.get('telefono','')
-        organización = request.POST.get('organizacion','')
+        organizacion = request.POST.get('organizacion','')
 
         # Comprobamos que el dni esté en la lista de dnis aptos
         if not DniAutorizado.objects.filter(dni=dni).exists():
@@ -595,7 +596,7 @@ def registroPage(request):
                 apellidos = apellidos,
                 puesto = puesto,
                 telefono = telefono,
-                organización=organización
+                organizacion=organizacion
             )
 
             new_user.set_password(psw)    #Para que la contraseña se encripte a la hora de la inserción

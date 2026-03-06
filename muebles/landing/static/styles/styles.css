@@ -825,3 +825,110 @@ t4 {
 /***************************************************************/
 /**************** FIN VISTA MUEBLE (nuevo) *********************/
 /**************************************************************/
+
+/**************************************************************/
+/************************* PERFIL ****************************/
+/************************************************************/
+
+@keyframes fadeEffect {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+.tabs-container{
+
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: 1fr;
+	border-bottom: 3px solid #00308F;
+	margin: 15px 0 15px 0;
+}
+
+.tab-link{
+
+	background-color: transparent;
+	border: none;
+    outline: none;
+    cursor: pointer;
+	padding: 14px 24px;
+	font-size: 18px;
+    font-weight: bold;
+	color: #6c757d;
+	transition: all 0.3s ease;
+    border-bottom: 4px solid transparent; 
+}
+
+.tab-link:hover {
+    background-color: #f8f9fa;
+    color: #333;
+    border-radius: 8px 8px 0 0;
+}
+
+.tab-link.active {
+    color: #00308F; 
+    border-bottom: 4px solid #00308F; 
+}
+
+.tab-content {
+    animation: fadeEffect 0.4s;
+}
+
+.filtros-estado {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap; 
+}
+
+.btn-filtro {
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    padding: 8px 18px;
+    border-radius: 25px; 
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    transition: all 0.2s ease;
+}
+
+.btn-filtro:hover {
+    background-color: #e2e6ea;
+}
+
+.btn-filtro.active {
+    background-color: #218838;
+    color: white;
+    border-color: #218838;
+    box-shadow: 0 3px 6px rgba(0, 48, 143, 0.3); 
+}
+
+
+.badge-reservado { 
+    color: #004085; 
+	font-size: 1.3rem;
+	font-weight: bold;
+}
+
+.badge-recogido { 
+    color: #155724; 
+	font-size: 1.3rem;
+	font-weight: bold;
+}
+
+.badge-retrasado { 
+    color: #856404; 
+	font-size: 1.3rem;
+	font-weight: bold;
+}
+
+.badge-cancelada { 
+    color: #721c24;
+	font-size: 1.3rem;
+	font-weight: bold;
+}
+
+/***********************************************************/
+/******************** FIN DE PERFIL ***********************/
+/*********************************************************/

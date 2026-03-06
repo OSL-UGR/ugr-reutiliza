@@ -22,6 +22,7 @@
             <thead>
                 <tr class="thead-row">
                     <th>Nombre</th>
+                    <th>DNI</th>
                     <th>Email</th>
                     <th>Organización</th>
                     <th>Rol</th>
@@ -32,6 +33,7 @@
                 {% for usuario in lista_usuarios %}
                 <tr class="tbody-row">
                     <td>{{ usuario.nombre }} {{ usuario.apellidos }}</td>
+                    <td>{{ usuario.dni }}</td>
                     <td>{{ usuario.email }}</td>
                     <td>{{ usuario.organizacion }}</td>
                     <td>

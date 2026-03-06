@@ -8,9 +8,8 @@
 {% if user.is_superuser %}
 	<li onclick='location.href="/{{URL}}usuarios";'>Gestión Usuarios</li>
 {% endif %}
-{% if user.is_staff or user.is_superuser %}
+
 <li onclick='location.href="/{{URL}}add";'>Añadir mueble</a></li>
-{% endif %}
 <li onclick='location.href="/{{URL}}perfil";'>Perfil</a></li>
 {% endblock %}
 
