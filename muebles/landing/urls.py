@@ -46,16 +46,15 @@ urlpatterns = [
         #TODO: Debería comprobar que solo puedes cancelar una reserva propia
         path("<int:mueble_id>/unbook", views.unbookMueble, name="unbook"),
 
-
-        #TODO: encontrar el html o e que caso borraríamos solo escribiendo el id y quitar esto. Debería siempre usarse la anterior ruta
         path("<int:mueble_id>/", views.deleteMueble, name="delete"),
 
         path('<int:reserva_id>/entregado', views.marcar_entregado, name='marcar_entregado'),
         path('<int:reserva_id>/republicar', views.republicar_retrasado, name='republicar_retrasado'),
 
-        # TODO Panel de administrador personalizado:
+        # Panel de administrador personalizado:
         path("usuarios", views.gestion_usuarios, name="gestion_usuarios"),
         path("usuarios/delete/<str:email>", views.delete_usuario, name="delete_usuario"),
+        path("usuarios/add_user", views.add_user, name = 'add_user'),
 
 
         re_path(r'^media/(?P<path>.*)$', serve, {'document_root':

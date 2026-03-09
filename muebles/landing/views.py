@@ -23,6 +23,9 @@ file = open(str(settings.BASE_DIR) + "/credentials.txt", "r")
 # Estos 3 parámetros son los que hemos rellenado dentro de credentials.txt
 email = file.readline().strip('\n')
 password = file.readline().strip('\n')
+print(email)
+print(password)
+
 inventoryEmail = file.readline().strip('\n')
 
 # /*************************************************************************************************/
@@ -179,7 +182,7 @@ def actualizar_reservas_retrasadas():
 
     # Calculamos el límite de tiempo de 7 días con respecto al día actual (la fecha inicial límite)
     # Ej: (5 de marzo de 2026 a las 10:00:00) - 7 días = (26 de febrero de 2026 a las 10:00:00)
-    limite = timezone.now() - timedelta(days=1)
+    limite = timezone.now() - timedelta(days=7)
 
     # Vemos que reservas se hicieron antes de esa fecha límite 
     reservas_retrasadas = Reserva.objects.filter(estado='Reservado', fecha_reserva__lt=limite)
@@ -531,13 +534,70 @@ def gestion_usuarios(request):
     
     return render(request, "muebles/gestion_usuarios.html", context)
 
-
-#TODO: queda por implementar
 @login_required
 @user_passes_test(es_superusuario, login_url='index')
 def delete_usuario(request, email):
 
+    if (request.method == "POST"):
+
+        usuario = Usuario.objects.get(pk=email)
+        usuario.delete()
+
     return redirect("gestion_usuarios")
+
+
+@login_required
+@user_passes_test(es_superusuario, login_url='index')
+def add_user(request):
+
+    context = {"URL": URL}
+
+    if request.method == "POST":
+
+        ## Recogemos todos los datos
+        dni = request.POST.get('dni','').strip().upper()
+        email = request.POST.get('email','').strip()
+        psw = request.POST.get('psw','')
+        nombre = request.POST.get('nombre','')
+        apellidos = request.POST.get('apellidos','')
+        puesto = request.POST.get('puesto','')
+        telefono = request.POST.get('telefono','')
+        organizacion = request.POST.get('organizacion','')
+
+        # Comprobamos que el dni esté en la lista de dnis aptos
+        if Usuario.objects.filter(dni=dni).exists():
+            context['error'] = "El usuario con los datos dados ya se encuentra registrado."
+            return render(request, "muebles/addUser.html", context)
+
+        # Comprobamos que ese usuario no intente registrarse con un email ya registrado
+        if Usuario.objects.filter(email=email).exists():
+            context['error'] = "Ese correo electrónico ya está en uso, por favor ingrese otro"
+            return render(request, "muebles/addUser.html", context)
+
+        try:
+            new_user = Usuario(
+                email = email,
+                dni = dni,
+                nombre = nombre,
+                apellidos = apellidos,
+                puesto = puesto,
+                telefono = telefono,
+                organizacion=organizacion
+            )
+
+            new_user.set_password(psw)    #Para que la contraseña se encripte a la hora de la inserción
+            new_user.save()
+
+            return redirect("gestion_usuarios")
+        
+        except Exception as e:
+            context['error'] = f"Error al crear el usuario: {e}"
+            return render(request, "muebles/addUser.html", context)
+
+    else:
+
+        return render(request, "muebles/addUser.html", context)
+
 
 # Función que carga la portada (pantalla principal) de la app
 def portada(request):
