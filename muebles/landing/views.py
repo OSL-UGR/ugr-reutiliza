@@ -23,8 +23,6 @@ file = open(str(settings.BASE_DIR) + "/credentials.txt", "r")
 # Estos 3 parámetros son los que hemos rellenado dentro de credentials.txt
 email = file.readline().strip('\n')
 password = file.readline().strip('\n')
-print(email)
-print(password)
 
 inventoryEmail = file.readline().strip('\n')
 
@@ -731,7 +729,7 @@ def republicar_retrasado(request, reserva_id):
 
             # Enviamos el correo notificando la cancelación definitiva
             nombreOfertante = f"{reserva.mueble.ofertante.nombre} {reserva.mueble.ofertante.apellidos}"
-            
+
             msg_cancelacion = mensajeCancelacionRetraso(reserva.mueble.nombre, reserva.cantidad, nombreOfertante, reserva.demandante.email)
             Thread(target=sendMail, args=(email, password, msg_cancelacion, reserva.demandante.email)).start()
 
