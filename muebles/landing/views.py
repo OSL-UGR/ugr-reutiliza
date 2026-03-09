@@ -162,6 +162,30 @@ El equipo de UGR Recicla.
     message["To"] = receptor
     return message
 
+# Correo cuando el ofertante cancela una reserva por retraso
+def mensajeCancelacionRetraso(nombre, cantidad, ofertante, receptor):
+    text = f"""\
+Hola,
+
+Te informamos de que tu reserva en UGR Recicla ha sido CANCELADA definitivamente por el ofertante.
+
+DATOS DE LA RESERVA CANCELADA:
+- Mueble: {nombre}
+- Unidades: {cantidad}
+- Ofertante: {ofertante}
+
+MOTIVO:
+Ha expirado el plazo máximo de 7 días para efectuar la recogida sin que se haya marcado como completada. El artículo ha sido devuelto al catálogo general y vuelve a estar disponible para otros usuarios.
+
+Un saludo,
+El equipo de UGR Recicla.
+    """
+    message = MIMEText(text, "plain")
+    message["Subject"] = f"[UGR Recicla] AVISO: Tu reserva ha sido cancelada por expiración de plazo - {nombre}"
+    message["From"] = email
+    message["To"] = receptor
+    return message
+
 # Envía un email, los mensajes base son las funciones anteriores a esta.
 def sendMail(email, password, message, receptor):
     with smtplib.SMTP(smtp_server, port) as server:
@@ -693,6 +717,7 @@ def marcar_entregado(request, reserva_id):
     return redirect(f"/{URL}{reserva.mueble.id}/post")
 
 # Cambia el estado de una reserva cancelandola, y liberando su stock
+@login_required
 def republicar_retrasado(request, reserva_id):
 
     reserva = Reserva.objects.get(pk=reserva_id)
@@ -704,6 +729,10 @@ def republicar_retrasado(request, reserva_id):
             reserva.estado = 'Cancelada'
             reserva.save()
 
-            #TODO: añadir un mensaje por correo al queha perdido la reserva notificandoselo
+            # Enviamos el correo notificando la cancelación definitiva
+            nombreOfertante = f"{reserva.mueble.ofertante.nombre} {reserva.mueble.ofertante.apellidos}"
+            
+            msg_cancelacion = mensajeCancelacionRetraso(reserva.mueble.nombre, reserva.cantidad, nombreOfertante, reserva.demandante.email)
+            Thread(target=sendMail, args=(email, password, msg_cancelacion, reserva.demandante.email)).start()
 
     return redirect(f"/{URL}{reserva.mueble.id}/post")

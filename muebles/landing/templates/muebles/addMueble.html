@@ -18,18 +18,18 @@
 {% else %}
 <h1>Añadir mueble</h1>
 {% endif %}
-<form action="{{ action }}" method="post" text-align="center" class="addMueble" enctype='multipart/form-data'>
+<form action="{{ action }}" method="post" style="text-align: center;" class="addMueble" enctype='multipart/form-data'>
 	{% csrf_token %}
 	<label for="nombre"><b>Nombre:</b></label>
-	<input type="text" id="nombre" value="{{ mueble.nombre }}" placeholder="Nombre" name="nombre" required>
+	<input type="text" id="nombre" value="{{ mueble.nombre }}" placeholder="Ej: Mesa de escritorio de madera" name="nombre" required>
 
 
 	<label for="desc"><b>Breve descripción:</b></label>
-	<input type="text" id="desc" value="{{ mueble.descripcion }}" placeholder="Descripción" name="desc" required>
+	<input type="text" id="desc" value="{{ mueble.descripcion }}" placeholder="Ej: Mesa con tres cajones, pequeño roce en la esquina" name="desc" required>
 	<div class="subgrid">
 		<div class="subgrid-item">
 			<label for="dim"><b>Dimensiones:</b></label>
-			<input type="text" id="dim" value="{{ mueble.dimensiones }}" placeholder="Dimensiones" name="dim" required multiple>
+			<input type="text" id="dim" value="{{ mueble.dimensiones }}" placeholder="Ej: 120x60x75 cm" name="dim" required multiple>
 		</div>
 		<div class="subgrid-item">
 				<label for="cant"><b>Categoria:</b></label>
@@ -58,7 +58,7 @@
 	<div class="subgrid">
 		<div class="subgrid-item">
 			<label for="ubiI"><b>Ubicación:</b></label>
-			<input type="text" id="ubiI" class="ubi" value="{{ mueble.ubiInicial }}" placeholder="Ubicación Inicial" name="ubiI" required>
+			<input type="text" id="ubiI" class="ubi" value="{{ mueble.ubiInicial }}" placeholder="Ej: Campus, Edificio, Planta, Local, Sublocal." name="ubiI" required>
 		</div>
 		<div class="subgrid-item">
 			<label for="cant"><b>Cantidad:</b></label>

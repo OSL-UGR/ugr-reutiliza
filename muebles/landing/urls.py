@@ -31,22 +31,16 @@ urlpatterns = [
         path("<int:mueble_id>/post", views.post, name="post"),
 
         # Borrar un mueble concreto con mueble_id
-        #TODO: Debería comprobar que solo pudes borrar tus propios muebles (a no ser que seas admin)
         path("<int:mueble_id>/delete", views.deleteMueble, name="delete"),
 
         # Modificar los parámetros de un mueble concreto con mueble_id
-        #TODO: debería comprobar que solo puedes modificar tus propios muebles (a no ser que seas admin)
         path("<int:mueble_id>/modify", views.modifyMueble, name="modify"),
 
         # Reserva un mueble concreto con mueble_id
-        #TODO: Debería comprobar que no puedes reservar un mueble propio 
         path("<int:mueble_id>/book", views.bookMueble, name="book"),
 
         # Cancela una reserva con mueble_id
-        #TODO: Debería comprobar que solo puedes cancelar una reserva propia
         path("<int:mueble_id>/unbook", views.unbookMueble, name="unbook"),
-
-        path("<int:mueble_id>/", views.deleteMueble, name="delete"),
 
         path('<int:reserva_id>/entregado', views.marcar_entregado, name='marcar_entregado'),
         path('<int:reserva_id>/republicar', views.republicar_retrasado, name='republicar_retrasado'),
