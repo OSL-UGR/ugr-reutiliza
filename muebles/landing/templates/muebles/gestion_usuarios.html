@@ -46,13 +46,16 @@
                         {% endif %}
                     </td>
                     <td>
-                        {% if usuario != user %}
+                        {% if usuario != user and not usuario.is_superuser %}
                             <form action="{% url 'delete_usuario' usuario.email %}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar a este usuario? Se borrarán sus reservas y muebles.');">
                                 {% csrf_token %}
                                 <button type="submit" class="btn-delete">
                                     Eliminar
                                 </button>
                             </form>
+                        {% elif usuario.is_superuser  %}
+
+                            <span class="text-muted">(Denegado)</span>
                         {% else %}
                             <span class="text-muted">(Tú)</span>
                         {% endif %}

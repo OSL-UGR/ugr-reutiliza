@@ -563,7 +563,10 @@ def delete_usuario(request, email):
     if (request.method == "POST"):
 
         usuario = Usuario.objects.get(pk=email)
-        usuario.delete()
+
+        if not usuario.is_superuser:
+           
+            usuario.delete()
 
     return redirect("gestion_usuarios")
 
