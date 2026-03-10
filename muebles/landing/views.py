@@ -540,7 +540,7 @@ def post(request, mueble_id):
 
 # Función que comprueba si el usuario es un super usuario
 def es_superusuario(user):
-    return user.is_superuser
+    return user.is_superuser or user.is_staff
 
 @login_required
 @user_passes_test(es_superusuario, login_url='index') # Si no es superuser, lo manda al index
