@@ -96,6 +96,17 @@ Se ha detectado que tras un periodo (no se sabe cuanto) el servidor apache muest
 [mpm_event:error] [pid 102553:tid 102553] AH03490: scoreboard is full, not at MaxRequestWorkers.Increase ServerLimit
 ```
 
+## Configuración del crontab:
+
+Para evitar que la página pueda caerse, hemos configurado con daemon crontab que se ejecuta todos los lunes a las 4 de la mañana con el objetiuvo de reelanzar la aplicación si es que esta se cayese. Tiene la siguiente forma:
+
+``` bash
+0 4 * * 1 /usr/bin/touch /opt/ugr-reutiliza/muebles/muebles/wsgi.py && /usr/bin/systemctl restart apache2
+```
+
+- /usr/bin/touch /opt/ugr-reutiliza/muebles/muebles/wsgi.py: Fuerza la actualización de el archivo WGSI (recarga Django)
+- /usr/bin/systemctl restart apache2: Reinicia el servicio de apache por completo.
+
 Esto se debe a que el servidor Apache utiliza un scoreboard interno para llevar la cuenta de que procesos están atendiendo a los usuarios. Este error salta cuando Apache se satura de conexiones que se an quedado colgadas. Para detectar este error hay que lanzar el comando del apartado anterior, para ver los logs de errores. La forma de arreglarlo es muy sencilla, no es más que sinplemente apagar y volver a lanzar el apache. 
 
 ``` bash
