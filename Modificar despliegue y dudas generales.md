@@ -96,7 +96,7 @@ Se ha detectado que tras un periodo (no se sabe cuanto) el servidor apache muest
 [mpm_event:error] [pid 102553:tid 102553] AH03490: scoreboard is full, not at MaxRequestWorkers.Increase ServerLimit
 ```
 
-Esto se debe a que el servidorm a que Apache utiliza un scoreboard interno para llevar la cuenta de que procesos están atendiendo a los usuarios. Este error salta cuando Apache se satura de conexiones que se an quedado colgadas. Para detectar este error hay que lanzar el comando del apartado anterior, para ver los logs de errores. La forma de arreglarlo es muy sencilla, no es más que sinplemente apagar y volver a lanzar el apache. 
+Esto se debe a que el servidor Apache utiliza un scoreboard interno para llevar la cuenta de que procesos están atendiendo a los usuarios. Este error salta cuando Apache se satura de conexiones que se an quedado colgadas. Para detectar este error hay que lanzar el comando del apartado anterior, para ver los logs de errores. La forma de arreglarlo es muy sencilla, no es más que sinplemente apagar y volver a lanzar el apache. 
 
 ``` bash
 sudo systemctl stop apache2
